@@ -29,6 +29,7 @@ public class TheQuest {
 		
 		frame.addKeyListener(panel);
 		
+		panel.startGame();
 	}
 	
 }
