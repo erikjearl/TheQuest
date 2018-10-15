@@ -34,7 +34,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
      boolean left;
 	 boolean right;
 	 
+	 public static BufferedImage GrassRoom;
+	 public static BufferedImage BlueRoom;
 	 public static BufferedImage GreenRoom;
+	 public static BufferedImage PurpleRoom;
 	 public static BufferedImage RedRoom;
 	 
 	 public GamePanel() {
@@ -43,7 +46,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		 timer = new Timer(1000/60, this);
 		 
 		 try {
+			GrassRoom = ImageIO.read(this.getClass().getResourceAsStream("GrassRoom.png"));
+			BlueRoom = ImageIO.read(this.getClass().getResourceAsStream("BlueRoom.png"));
 			GreenRoom = ImageIO.read(this.getClass().getResourceAsStream("GreenRoom.png"));
+			PurpleRoom = ImageIO.read(this.getClass().getResourceAsStream("PurpleRoom.png"));
 			RedRoom = ImageIO.read(this.getClass().getResourceAsStream("RedRoom.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -51,11 +57,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		}
 		 
 		 BGImage = new BufferedImage[3][3];
-		 BGImage[0][1] = RedRoom;
-		 BGImage[1][0] = RedRoom;
-		 BGImage[1][1] = GreenRoom;
+		 BGImage[0][1] = BlueRoom;
+		 BGImage[1][0] = PurpleRoom;
+		 BGImage[1][1] = GrassRoom;
 		 BGImage[1][2] = RedRoom;
-		 BGImage[2][1] = RedRoom;
+		 BGImage[2][1] = GreenRoom;
 		 
 	}
 	 
@@ -77,10 +83,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	void drawGameScreen(Graphics g) {
-		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH, HEIGHT, null);		
+		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH-1, HEIGHT-2, null);		
 		
-		//g.setColor(Color.GREEN);
-		//g.fillRect(0, 0, TheQuest.width, TheQuest.height);
+		
 		
 		player.draw(g);
 	}
