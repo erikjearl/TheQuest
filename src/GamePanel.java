@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	 Font titleFont;
 	 Font subFont;
 	 
-	 Player player = new Player(475, 475, 50, 50);
+	 Player player = new Player(350, 350, 50, 50);
 	 boolean up;
  	 boolean down;
      boolean left;
@@ -70,9 +70,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		
 		g.setFont(titleFont);
 		g.setColor(Color.CYAN);
-		g.drawString("The Quest", 400, 350);
+		g.drawString("The Quest", 235, 300);
 		g.setFont(subFont);
-		g.drawString("press space to start", 385, 400);
+		g.drawString("press space to start", 225, 350);
 		
 	}
 	
@@ -181,23 +181,45 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			player.x+=player.speed;
 		}
 		
-		if(player.y + player.height < 0) {
-			player.y= 1000 - player.height;
-			currentAreaY--;
+		if(player.y < 0) {
+			if(currentAreaY == 0 || (currentAreaY == 1 && currentAreaX ==0) || (currentAreaY == 1 && currentAreaX ==2)) {
+				up = false;
+			}
+			else {
+				currentAreaY--;
+				player.y= TheQuest.height - player.height;
+			}
+			
 		}
 		
-		if(player.y > 1000) {
-			player.y= 0 - player.height;
-			currentAreaY++;
+		if(player.y > TheQuest.height - player.height) {
+			if(currentAreaY == 2 || (currentAreaY == 1 && currentAreaX ==0) || (currentAreaY == 1 && currentAreaX ==2)) {
+				down = false;
+			}
+			else {
+				currentAreaY++;
+				player.y= 0;
+			}
 		}
 		
-		if(player.x + player.width < 0) {
-			player.x= 1000;
-			currentAreaX--;
+		if(player.x < 0) {
+			if(currentAreaX == 0 || (currentAreaX ==1 && currentAreaY ==0) || (currentAreaX ==1 && currentAreaY ==2) ) {
+				left = false;
+			}
+			else {
+				player.x= TheQuest.width - player.width;
+				currentAreaX--;
+			}
 		}
-		if(player.x > 1000) {
-			player.x= 0- player.height;
-			currentAreaX++;
+		if(player.x > TheQuest.width - player.width) {
+			if(currentAreaX == 2 || (currentAreaX ==1 && currentAreaY ==0) || (currentAreaX ==1 && currentAreaY ==2)) {
+				right = false;
+			}
+			else{
+				player.x= 0 ;
+				currentAreaX++;
+			}
+			
 		}
 		
 		

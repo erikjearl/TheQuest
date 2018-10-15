@@ -4,8 +4,8 @@ import javax.swing.JFrame;
 public class TheQuest {
 	JFrame frame;
 	GamePanel panel;
-	final public static int width = 1000;
-	final public static int height = 1000;
+	final public static int width = 750;
+	final public static int height = 750;
 	
 	
 	
