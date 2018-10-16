@@ -12,12 +12,21 @@ public class Player extends GameObject{
 	void update(){
 		super.update();
 		
-		
 	}
 
 	void draw(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(x, y, width, height);
 	}
+	
+	int getX() {
+		return x;
+	}
+	
+	int getY() {
+		return y;
+	}
+	
+	
 	
 }

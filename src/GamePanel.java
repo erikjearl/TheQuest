@@ -17,28 +17,33 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	
 	
 	static final int titleScreen = 0;
-	 static final int GameScreen = 1;
-	 static final int creditScreen = 1;
-	 int currentScreen = titleScreen; 
+	static final int GameScreen = 1;
+	static final int creditScreen = 1;
+	int currentScreen = titleScreen; 
 	int currentAreaX =1;
 	int currentAreaY =1;
-	BufferedImage[][] BGImage;
-	 
-	 
-	 Font titleFont;
-	 Font subFont;
-	 
-	 Player player = new Player(350, 350, 50, 50);
+	
 	 boolean up;
  	 boolean down;
      boolean left;
 	 boolean right;
 	 
+	 BufferedImage[][] BGImage;
 	 public static BufferedImage GrassRoom;
 	 public static BufferedImage BlueRoom;
 	 public static BufferedImage GreenRoom;
 	 public static BufferedImage PurpleRoom;
 	 public static BufferedImage RedRoom;
+	 
+	 Font titleFont;
+	 Font subFont;
+	 
+	 //objects
+	 Player player = new Player(350, 350, 50, 50);
+	 Sword sword = new Sword(player.x, player.y);
+	 WiseMan wiseMan = new WiseMan(600, 325);
+	 
+	
 	 
 	 public GamePanel() {
 		 titleFont = new Font("Arial",Font.BOLD,48);
@@ -78,16 +83,36 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		g.setColor(Color.CYAN);
 		g.drawString("The Quest", 235, 300);
 		g.setFont(subFont);
-		g.drawString("press space to start", 225, 350);
+		g.drawString("press space to start", 235, 350);
 		
 	}
 	
 	void drawGameScreen(Graphics g) {
 		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH-1, HEIGHT-2, null);		
-		
-		
-		
 		player.draw(g);
+		sword.draw(g);
+		
+		if(currentAreaY==0) {					
+
+			
+		}
+		if(currentAreaY==1) {
+			if(currentAreaX==0) {
+				
+			}
+			if(currentAreaX==1) {
+						
+			}
+			if(currentAreaX==2) {	
+				wiseMan.draw(g);	
+			}		
+		}
+		if(currentAreaY==0) {
+			
+		}
+		
+		
+		
 	}
 	
 	void drawCreditScreen(Graphics g) {
@@ -144,11 +169,16 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			}
 			if(e.getKeyCode() == KeyEvent.VK_A ) {
 				left=true;
+				sword.isRight = false;
 			}
 			if(e.getKeyCode() == KeyEvent.VK_D ) {
 				right=true;
+				sword.isRight = true;
 			}
 		
+		if(e.getKeyCode() == KeyEvent.VK_SPACE ) {
+			sword.isAttacking = true;
+		}	
 		
 	}
 
@@ -156,7 +186,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getKeyCode() == KeyEvent.VK_W ) {
-			//rocket.y-=rocket.speed;
 				up=false;
 			}
 			if(e.getKeyCode() == KeyEvent.VK_S) {
@@ -168,11 +197,59 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			if(e.getKeyCode() == KeyEvent.VK_D ) {
 				right=false;
 			}
+			
+		if(e.getKeyCode() == KeyEvent.VK_SPACE ) {
+			sword.isAttacking = false;
+		}	
 	}
+		
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
+		
+		if(player.y < 0) {
+			if(currentAreaY == 0 || (BGImage[currentAreaX][currentAreaY-1] == null) ) {
+				up = false;
+			}
+			else {
+				currentAreaY--;
+				player.y= TheQuest.height - player.height;
+			}
+			
+		}
+		
+		if(player.y > TheQuest.height - player.height) {
+			if(currentAreaY == 2 || (BGImage[currentAreaX][currentAreaY+1] == null)) {
+				down = false;
+			}
+			else{
+				currentAreaY++;
+				player.y= 0;
+			}
+		}
+		
+		if(player.x < 0) {
+			if(currentAreaX == 0 || (BGImage[currentAreaX-1][currentAreaY] == null)) {
+				left = false;
+			}
+			else {
+				player.x= TheQuest.width - player.width;
+				currentAreaX--;
+			}
+		}
+		if(player.x > TheQuest.width - player.width) {
+			if(currentAreaX == 2 || (BGImage[currentAreaX+1][currentAreaY] == null)) {
+				right = false;
+			}
+			else{
+				player.x= 0 ;
+				currentAreaX++;
+			}
+			
+		}
+		
 		if(up) {
 			player.y-=player.speed;
 		}
@@ -186,47 +263,23 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			player.x+=player.speed;
 		}
 		
-		if(player.y < 0) {
-			if(currentAreaY == 0 || (currentAreaY == 1 && currentAreaX ==0) || (currentAreaY == 1 && currentAreaX ==2)) {
-				up = false;
-			}
-			else {
-				currentAreaY--;
-				player.y= TheQuest.height - player.height;
-			}
+		if(sword.isRight) {
+			sword.x = player.x+player.width;
 			
 		}
-		
-		if(player.y > TheQuest.height - player.height) {
-			if(currentAreaY == 2 || (currentAreaY == 1 && currentAreaX ==0) || (currentAreaY == 1 && currentAreaX ==2)) {
-				down = false;
-			}
+		else {
+			if (!sword.isAttacking) {
+				sword.x = player.x-sword.width;}
 			else {
-				currentAreaY++;
-				player.y= 0;
-			}
+				sword.x = player.x-sword.height;}
 		}
 		
-		if(player.x < 0) {
-			if(currentAreaX == 0 || (currentAreaX ==1 && currentAreaY ==0) || (currentAreaX ==1 && currentAreaY ==2) ) {
-				left = false;
-			}
-			else {
-				player.x= TheQuest.width - player.width;
-				currentAreaX--;
-			}
+		if (!sword.isAttacking) {	
+			sword.y=player.y-sword.width;
 		}
-		if(player.x > TheQuest.width - player.width) {
-			if(currentAreaX == 2 || (currentAreaX ==1 && currentAreaY ==0) || (currentAreaX ==1 && currentAreaY ==2)) {
-				right = false;
-			}
-			else{
-				player.x= 0 ;
-				currentAreaX++;
-			}
-			
+		else {
+			sword.y = player.y+ (player.height/2) ;
 		}
-		
 		
 	}
 }
