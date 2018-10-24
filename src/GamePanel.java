@@ -100,6 +100,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH-1, HEIGHT-2, null);		
 		objMan.checkCollision();
 		objMan.purgeObjects();
+		objMan.update();
 		objMan.draw(g);
 		
 		if(currentAreaY==0) {					
