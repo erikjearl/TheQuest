@@ -3,15 +3,16 @@ import java.awt.Graphics;
 
 public class Player extends GameObject{
 	int speed;
+	int health;
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		speed = 7;
+		health = 3;
 	}
 	
 	void update(){
 		super.update();
-		
 	}
 
 	void draw(Graphics g) {

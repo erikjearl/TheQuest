@@ -14,7 +14,6 @@ public class GameObject {
 	    		this.y = y;
 	    		this.width = width;
 	    		this.height = height;
-	    		
 	    		collisionBox = new Rectangle(x, y, width, height);
 	    }
 	    

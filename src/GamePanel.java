@@ -15,7 +15,6 @@ import javax.swing.Timer;
 public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	Timer timer;
 	
-	
 	static final int titleScreen = 0;
 	static final int GameScreen = 1;
 	static final int creditScreen = 1;
@@ -38,7 +37,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	 Font titleFont;
 	 Font subFont;
 	 
+	 
 	 //objects
+	 ObjectManager objMan;
 	 Player player = new Player(350, 350, 50, 50);
 	 Sword sword = new Sword(player.x, player.y);
 	 WiseMan wiseMan = new WiseMan(600, 325);
@@ -49,6 +50,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		 titleFont = new Font("Arial",Font.BOLD,48);
 		 subFont = new Font("Arial",Font.PLAIN,30);
 		 timer = new Timer(1000/60, this);
+		 objMan = new ObjectManager(player, sword, wiseMan);
 		 
 		 try {
 			GrassRoom = ImageIO.read(this.getClass().getResourceAsStream("GrassRoom.png"));
@@ -74,6 +76,13 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		 timer.start();
 	 }
 	 
+	 void updateGameScreen() {
+		 objMan.update();
+		 
+		 if(!player.isAlive) {
+			 currentScreen = creditScreen;
+		 }
+	 }
 	 
 	void drawTitleScreen(Graphics g) {
 		g.setColor(Color.MAGENTA);
@@ -89,27 +98,29 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	
 	void drawGameScreen(Graphics g) {
 		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH-1, HEIGHT-2, null);		
-		player.draw(g);
-		sword.draw(g);
+		objMan.checkCollision();
+		objMan.purgeObjects();
+		objMan.draw(g);
 		
 		if(currentAreaY==0) {					
-
 			
-		}
-		if(currentAreaY==1) {
-			if(currentAreaX==0) {
-				
-			}
-			if(currentAreaX==1) {
+				}
+				if(currentAreaY==1) {
+					if(currentAreaX==0) {
 						
-			}
-			if(currentAreaX==2) {	
-				wiseMan.draw(g);	
-			}		
-		}
-		if(currentAreaY==0) {
-			
-		}
+					}
+					if(currentAreaX==1) {
+								
+					}
+					if(currentAreaX==2) {	
+						wiseMan.isAlive = true;	
+					}
+					else {wiseMan.isAlive = false;}
+				}
+				if(currentAreaY==0) {
+					
+				}
+		
 		
 		
 		
@@ -161,7 +172,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_W ) {
-			//rocket.y-=rocket.speed;
 				up=true;
 			}
 			if(e.getKeyCode() == KeyEvent.VK_S) {

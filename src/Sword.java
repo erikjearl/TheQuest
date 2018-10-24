@@ -6,6 +6,7 @@ public class Sword extends GameObject{
 	boolean isRight = true;
 	static int width = 15;
 	static int height = 45;
+	boolean hasSword = false;
 	
 	public Sword(int x, int y) {
 		super(x, y, width, height);
@@ -17,7 +18,7 @@ public class Sword extends GameObject{
 	}
 
 	void draw(Graphics g) {
-		if(isAttacking) {
+		if(isAttacking) { 
 			g.setColor(Color.BLACK);
 			g.fillRect(x, y, height, width);
 		}
