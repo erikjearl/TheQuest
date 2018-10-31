@@ -14,7 +14,8 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	Timer timer;
-	
+	long ticks =0;
+	long startAttack = 0;
 	static final int titleScreen = 0;
 	static final int GameScreen = 1;
 	static final int creditScreen = 1;
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	 Font titleFont;
 	 Font subFont;
 	 
+	 boolean holdingSpaceBar = false;
 	 
 	 //objects
 	 ObjectManager objMan;
@@ -78,7 +80,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	 
 	 void updateGameScreen() {
 		 objMan.update();
-		 
 		 if(!player.isAlive) {
 			 currentScreen = creditScreen;
 		 }
@@ -97,6 +98,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	void drawGameScreen(Graphics g) {
+		updateGameScreen();
 		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH-1, HEIGHT-2, null);		
 		objMan.checkCollision();
 		objMan.purgeObjects();
@@ -187,9 +189,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 				sword.isRight = true;
 			}
 		
-		if(e.getKeyCode() == KeyEvent.VK_SPACE ) {
-			sword.isAttacking = true;
-		}	
+		if(e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
+			Sword.isAttacking = true;
+			startAttack = ticks;
+			holdingSpaceBar = true;
+		}
 		
 	}
 
@@ -210,7 +214,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			}
 			
 		if(e.getKeyCode() == KeyEvent.VK_SPACE ) {
-			sword.isAttacking = false;
+			Sword.isAttacking = false;
+			holdingSpaceBar = false;
 		}	
 	}
 		
@@ -218,7 +223,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		ticks++;
 		
 		if(player.y < 0) {
 			if(currentAreaY == 0 || (BGImage[currentAreaX][currentAreaY-1] == null) ) {
@@ -274,23 +279,30 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			player.x+=player.speed;
 		}
 		
-		if(sword.isRight) {
-			sword.x = player.x+player.width;
-			
-		}
-		else {
-			if (!sword.isAttacking) {
-				sword.x = player.x-sword.width;}
+		
+		
+		if (ticks- startAttack > 100) { Sword.isAttacking = false;}
+		//System.out.println(ticks + " " + startAttack);
+		
+		if (!Sword.isAttacking) {
+			sword.y=player.y-Sword.width;
+			if(sword.isRight) {
+				sword.x = player.x+player.width;
+			}
 			else {
-				sword.x = player.x-sword.height;}
-		}
-		
-		if (!sword.isAttacking) {	
-			sword.y=player.y-sword.width;
+				sword.x = player.x-Sword.width;
+			}
 		}
 		else {
-			sword.y = player.y+ (player.height/2) ;
+			sword.y = player.y+ (player.height/2);
+			if(sword.isRight) {
+				sword.x = player.x+Sword.height+(Sword.width/3);	
+			}
+			else {
+				sword.x = player.x-Sword.height;
+			}
 		}
-		
+
+		repaint();
 	}
 }

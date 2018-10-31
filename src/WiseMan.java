@@ -15,11 +15,12 @@ public class WiseMan extends GameObject{
 	
 	void update(){
 		super.update();
+		//System.out.println(collisionBox);
 	}
 	
 	void draw(Graphics g) {
 		g.setColor(Color.white);
-		g.fillRect(x, y, width, height);
+		g.fillRect(x+xAdjust, y+yAdjust, width, height);
 	}
 	
 	

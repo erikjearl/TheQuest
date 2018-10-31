@@ -15,16 +15,17 @@ public class Sword extends GameObject{
 	
 	void update(){
 		super.update();
+		//System.out.println(collisionBox);
 	}
 
 	void draw(Graphics g) {
 		if(isAttacking) { 
 			g.setColor(Color.BLACK);
-			g.fillRect(x, y, height, width);
+			g.fillRect(x+xAdjust, y+yAdjust, height, width);
 		}
 		else {
 			g.setColor(Color.BLACK);
-			g.fillRect(x, y, width, height);
+			g.fillRect(x+xAdjust, y+yAdjust, width, height);
 		}
 	}
 	
