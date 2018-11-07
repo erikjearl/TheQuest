@@ -3,10 +3,12 @@ import java.awt.Graphics;
 
 public class Monster extends GameObject {
 	int health;
+	boolean isAlive;
 	
 	public Monster(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		health = 3;
+		health = 5;
+		isAlive = true;
 	}
 	
 	void update() {

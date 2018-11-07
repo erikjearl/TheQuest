@@ -8,8 +8,6 @@ public class GameObject {
 	int height;
 	boolean isAlive = true;
 	Rectangle collisionBox;
-	int yAdjust = -50;
-	int xAdjust = 30;
 	    
 	    public GameObject(int x, int y, int width, int height) {
 	    		this.x = x;

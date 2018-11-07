@@ -9,7 +9,7 @@ public class WiseMan extends GameObject{
 	
 	public WiseMan(int x, int y) {
 		super(x, y, width, height);
-		health = 10;
+		health = 100;
 		isAlive = false;
 	}
 	
@@ -20,7 +20,7 @@ public class WiseMan extends GameObject{
 	
 	void draw(Graphics g) {
 		g.setColor(Color.white);
-		g.fillRect(x+xAdjust, y+yAdjust, width, height);
+		g.fillRect(x, y, width, height);
 	}
 	
 	

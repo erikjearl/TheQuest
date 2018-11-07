@@ -20,8 +20,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	static final int GameScreen = 1;
 	static final int creditScreen = 1;
 	int currentScreen = titleScreen; 
-	int currentAreaX =1;
-	int currentAreaY =1;
+	static int currentAreaX =1;
+	static int currentAreaY =1;
 	
 	 boolean up;
  	 boolean down;
@@ -39,6 +39,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	 Font subFont;
 	 
 	 boolean holdingSpaceBar = false;
+	 
+	
+	 
 	 
 	 //objects
 	 ObjectManager objMan;
@@ -105,28 +108,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		objMan.update();
 		objMan.draw(g);
 		
-		if(currentAreaY==0) {					
-			
-				}
-				if(currentAreaY==1) {
-					if(currentAreaX==0) {
-						
-					}
-					if(currentAreaX==1) {
-								
-					}
-					if(currentAreaX==2) {	
-						wiseMan.isAlive = true;	
-					}
-					else {wiseMan.isAlive = false;}
-				}
-				if(currentAreaY==0) {
-					
-				}
-		
-		
-		
-		
 	}
 	
 	void drawCreditScreen(Graphics g) {
@@ -190,6 +171,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			}
 		
 		if(e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
+			sword.update();
 			Sword.isAttacking = true;
 			startAttack = ticks;
 			holdingSpaceBar = true;
@@ -293,10 +275,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 				sword.x = player.x-Sword.width;
 			}
 		}
+		
 		else {
 			sword.y = player.y+ (player.height/2);
 			if(sword.isRight) {
-				sword.x = player.x+Sword.height+(Sword.width/3);	
+				sword.x = player.x+player.width;
 			}
 			else {
 				sword.x = player.x-Sword.height;

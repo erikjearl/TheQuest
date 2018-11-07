@@ -17,15 +17,16 @@ public class Player extends GameObject{
 
 	void draw(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(x+xAdjust, y+yAdjust, width, height);
+		//g.fillRect(x+xAdjust, y+yAdjust, width, height);
+		g.fillRect(x, y, width, height);
 	}
 	
 	int getX() {
-		return x+xAdjust;
+		return x;
 	}
 	
 	int getY() {
-		return y+yAdjust;
+		return y;
 	}
 	
 	
