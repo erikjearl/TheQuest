@@ -9,12 +9,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	Timer timer;
-	long ticks =0;
+	static long ticks =0;
 	long startAttack = 0;
 	static final int titleScreen = 0;
 	static final int GameScreen = 1;
@@ -48,14 +49,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 	 Player player = new Player(350, 350, 50, 50);
 	 Sword sword = new Sword(player.x, player.y);
 	 WiseMan wiseMan = new WiseMan(600, 325);
-	 
+	 Key key = new Key(player.x,player.y - 25, 30, 15);
 	
 	 
 	 public GamePanel() {
 		 titleFont = new Font("Arial",Font.BOLD,48);
 		 subFont = new Font("Arial",Font.PLAIN,30);
 		 timer = new Timer(1000/60, this);
-		 objMan = new ObjectManager(player, sword, wiseMan);
+		 objMan = new ObjectManager(player, sword, wiseMan, key);
 		 
 		 try {
 			GrassRoom = ImageIO.read(this.getClass().getResourceAsStream("GrassRoom.png"));
@@ -169,6 +170,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 				right=true;
 				sword.isRight = true;
 			}
+			if(e.getKeyCode() == KeyEvent.VK_K ) {
+				key.hasKey =true;
+			}
 		
 		if(e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
 			sword.update();
@@ -222,7 +226,18 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			if(currentAreaY == 2 || (BGImage[currentAreaX][currentAreaY+1] == null)) {
 				down = false;
 			}
-			else{
+			else if(currentAreaY == 1 && !key.hasKey) {
+				player.y-=10;
+				down = false;
+				JOptionPane.showMessageDialog(null,
+						"You must first get they key from a wise man");
+				
+			}
+			else if (currentAreaY == 0){
+				currentAreaY++;
+				player.y= 0;
+			}
+			else if (currentAreaY == 1 && key.hasKey) {
 				currentAreaY++;
 				player.y= 0;
 			}
@@ -265,14 +280,16 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 		
 		if (ticks- startAttack > 100) { Sword.isAttacking = false;}
 		//System.out.println(ticks + " " + startAttack);
-		
+		key.y = player.y -25;
 		if (!Sword.isAttacking) {
 			sword.y=player.y-Sword.width;
 			if(sword.isRight) {
 				sword.x = player.x+player.width;
+				key.x = player.x - 60;
 			}
 			else {
 				sword.x = player.x-Sword.width;
+				key.x = player.x + player.width + 50;
 			}
 		}
 		
@@ -280,9 +297,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
 			sword.y = player.y+ (player.height/2);
 			if(sword.isRight) {
 				sword.x = player.x+player.width;
+				key.x = player.x - 60;
 			}
 			else {
 				sword.x = player.x-Sword.height;
+				key.x = 2 * player.x + player.width + 50;
 			}
 		}
 
