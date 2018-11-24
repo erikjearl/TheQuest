@@ -1,4 +1,5 @@
 import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
 public class TheQuest {
@@ -6,19 +7,17 @@ public class TheQuest {
 	GamePanel panel;
 	final public static int width = 750;
 	final public static int height = 750;
-	
-	
-	
+
 	public static void main(String[] args) {
 		TheQuest quest = new TheQuest();
 		quest.setup();
 	}
-	
-	public TheQuest(){
+
+	public TheQuest() {
 		frame = new JFrame();
 		panel = new GamePanel();
 	}
-	
+
 	void setup() {
 		frame.add(panel);
 		frame.setVisible(true);
@@ -26,10 +25,10 @@ public class TheQuest {
 		frame.setSize(width, height);
 		frame.getContentPane().setPreferredSize(new Dimension(width, height));
 		frame.pack();
-		
+
 		frame.addKeyListener(panel);
-		
+
 		panel.startGame();
 	}
-	
+
 }

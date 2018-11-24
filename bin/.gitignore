@@ -3,6 +3,7 @@
 /GamePanel.class
 /GrassRoom.png
 /GreenRoom.png
+/Key.class
 /Monster.class
 /ObjectManager.class
 /Player.class
@@ -11,4 +12,4 @@
 /Sword.class
 /TheQuest.class
 /WiseMan.class
-/Key.class
+/Boss.class
