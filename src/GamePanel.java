@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	public static BufferedImage GreenRoom;
 	public static BufferedImage PurpleRoom;
 	public static BufferedImage RedRoom;
+	public static BufferedImage StoneFloor;
 
 	Font titleFont;
 	Font subFont;
@@ -48,7 +49,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	Sword sword = new Sword(player.x, player.y);
 	WiseMan wiseMan = new WiseMan(600, 325);
 	Key key = new Key(player.x, player.y - 25, 30, 15);
-	Boss boss = new Boss(400, 400, 300, 300);
+	Boss boss = new Boss(200, 400, 300, 300);
 
 	public GamePanel() {
 		titleFont = new Font("Arial", Font.BOLD, 48);
@@ -62,17 +63,20 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			GreenRoom = ImageIO.read(this.getClass().getResourceAsStream("GreenRoom.png"));
 			PurpleRoom = ImageIO.read(this.getClass().getResourceAsStream("PurpleRoom.png"));
 			RedRoom = ImageIO.read(this.getClass().getResourceAsStream("RedRoom.png"));
+			StoneFloor = ImageIO.read(this.getClass().getResourceAsStream("StoneFloor.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		BGImage = new BufferedImage[3][3];
+		BGImage = new BufferedImage[4][3];
 		BGImage[0][1] = BlueRoom;
 		BGImage[1][0] = PurpleRoom;
 		BGImage[1][1] = GrassRoom;
 		BGImage[1][2] = RedRoom;
 		BGImage[2][1] = GreenRoom;
+		BGImage[3][1] = StoneFloor;
+		
 
 	}
 
@@ -122,12 +126,12 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		 if (!player.isAlive) {
 		g.setFont(subFont);
 		g.drawString("YOU DIED", 275, 350);
-		g.drawString("Score: " + player.playerScore, 291, 385);
+		g.drawString("Score: " + Player.playerScore, 291, 385);
 		 }
 		else if(player.isAlive) {
 			g.setFont(subFont);
 			g.drawString("YOU WON!", 273, 350);
-			g.drawString("Score: " + player.playerScore * player.health, 291, 385);
+			g.drawString("Score: " + Player.playerScore * player.health, 291, 385);
 		}
 		
 		
@@ -142,6 +146,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			drawGameScreen(g);
 		} else if (currentScreen == creditScreen) {
 			drawCreditScreen(g);
+		} else if (currentScreen > 2) {
+			currentScreen = titleScreen;
 		}
 
 		repaint();
@@ -192,6 +198,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		}
 		if (e.getKeyCode() == KeyEvent.VK_O) {
 			currentScreen++;
+			System.out.println("skip");
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
@@ -252,7 +259,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 		if (player.y < 0) {
 			if (currentAreaY == 0 || (BGImage[currentAreaX][currentAreaY - 1] == null)) {
-				up = false;
+				//up = false;
+				player.y= 1;
 			} else {
 				currentAreaY--;
 				player.y = TheQuest.height - player.height;
@@ -262,10 +270,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 		if (player.y > TheQuest.height - player.height) {
 			if (currentAreaY == 2 || (BGImage[currentAreaX][currentAreaY + 1] == null)) {
-				down = false;
+				//down = false;
+				player.y = 699;
 
 			} else if (currentAreaY == 1 && !key.hasKey && !isUnlocked) {
-				player.y -= 10;
+				player.y = 695;
 				down = false;
 				JOptionPane.showMessageDialog(null, "You must first get they key from a wise man");
 
@@ -281,16 +290,18 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		}
 
 		if (player.x < 0) {
-			if (currentAreaX == 0 || (BGImage[currentAreaX - 1][currentAreaY] == null)) {
-				left = false;
+			if (currentAreaX == 0 || currentAreaX==3 || (BGImage[currentAreaX - 1][currentAreaY] == null)) {
+				//left = false;
+				player.x = 1;
 			} else {
 				player.x = TheQuest.width - player.width;
 				currentAreaX--;
 			}
 		}
 		if (player.x > TheQuest.width - player.width) {
-			if (currentAreaX == 2 || (BGImage[currentAreaX + 1][currentAreaY] == null)) {
-				right = false;
+			if ((currentAreaX == 2 && !objMan.finalTalk) || currentAreaX == 3 || (BGImage[currentAreaX + 1][currentAreaY] == null)) {
+				//right = false;
+				player.x = 699;
 			} else {
 				player.x = 0;
 				currentAreaX++;
