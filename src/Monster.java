@@ -8,7 +8,7 @@ public class Monster extends GameObject {
 	
 	public Monster(int x, int y, int width, int height, int moveType) {
 		super(x, y, width, height);
-		health = 5;
+		health = 75;
 		isAlive = true;
 		this.moveType = moveType;
 	}

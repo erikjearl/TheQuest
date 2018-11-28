@@ -228,7 +228,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			Sword.isAttacking = false;
 			holdingSpaceBar = false;
 		}
 	}
@@ -309,7 +308,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 		}
 
-		if (ticks - startAttack > 100) {
+		if (ticks - startAttack > 10) {
 			Sword.isAttacking = false;
 		}
 

@@ -14,6 +14,8 @@ public class ObjectManager {
 	boolean thirdTalk;
 	boolean finalTalk;
 	long monsterAtt = 0;
+	long manHurt = 0;
+	long bossHurt = 0;
 
 	// Y1
 	boolean spawnedY1 = false;
@@ -192,7 +194,6 @@ public class ObjectManager {
 					sword.update();
 					man.health -= 1;
 					System.out.println("You hit the man");
-					Sword.isAttacking = false;
 				}
 			}
 			if (p.collisionBox.intersects(man.collisionBox)) {
@@ -215,6 +216,7 @@ public class ObjectManager {
 					finalTalk= true;
 					JOptionPane.showMessageDialog(null,
 							"That was all easy, looking for a real challenge? Try fighting me!");
+					p.health+= 2;
 					
 				}
 				
@@ -238,7 +240,6 @@ public class ObjectManager {
 					sword.update();
 					boss.health -= 1;
 					System.out.println("Boss Health: " + boss.health);
-					Sword.isAttacking = false;
 				}
 			}
 			

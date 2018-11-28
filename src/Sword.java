@@ -48,7 +48,7 @@ public class Sword extends GameObject{
 	}
 	
 	void setIsAttacking(boolean isAttacking) {
-		this.isAttacking = isAttacking;
+		Sword.isAttacking = isAttacking;
 	}
 	
 }

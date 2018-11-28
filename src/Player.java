@@ -10,7 +10,7 @@ public class Player extends GameObject {
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		speed = 7;
-		health = 3;
+		health = 5;
 		playerScore =0;
 	}
 
@@ -27,15 +27,10 @@ public class Player extends GameObject {
 		g.fillRect(x, y, width, height);
 
 		g.setColor(Color.RED);
-		if (health > 2) {
-			g.fillRect(650, 21, 20, 20);
+		for(int i =0; i < health; i++) {
+			g.fillRect(710 - (25 *i), 21, 20, 20);
 		}
-		if (health > 1) {
-			g.fillRect(680, 21, 20, 20);
-		}
-		if (health > 0) {
-			g.fillRect(710, 21, 20, 20);
-		}
+		
 	}
 
 	int getX() {
