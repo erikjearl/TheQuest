@@ -19,8 +19,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	long startAttack = 0;
 	static final int titleScreen = 0;
 	static final int GameScreen = 1;
-	static final int creditScreen = 1;
-	int currentScreen = titleScreen;
+	static final int creditScreen = 2;
+	static int currentScreen = titleScreen;
 	static int currentAreaX = 1;
 	static int currentAreaY = 1;
 
@@ -83,7 +83,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	void updateGameScreen() {
 		objMan.update();
 		if (!player.isAlive) {
-			currentScreen = creditScreen;
+			currentScreen++;
+			System.out.println("DEAD");
 		}
 	}
 
@@ -100,6 +101,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	}
 
 	void drawGameScreen(Graphics g) {
+		
 		updateGameScreen();
 		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH - 1, HEIGHT - 2, null);
 		objMan.checkCollision();
@@ -112,6 +114,23 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	void drawCreditScreen(Graphics g) {
 		g.setColor(Color.cyan);
 		g.fillRect(0, 0, TheQuest.width, TheQuest.height);
+		
+		g.setFont(titleFont);
+		g.setColor(Color.MAGENTA);
+		g.drawString("The Quest", 235, 300);
+		
+		 if (!player.isAlive) {
+		g.setFont(subFont);
+		g.drawString("YOU DIED", 275, 350);
+		g.drawString("Score: " + player.playerScore, 291, 385);
+		 }
+		else if(player.isAlive) {
+			g.setFont(subFont);
+			g.drawString("YOU WON!", 273, 350);
+			g.drawString("Score: " + player.playerScore * player.health, 291, 385);
+		}
+		
+		
 	}
 
 	@Override
@@ -123,7 +142,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			drawGameScreen(g);
 		} else if (currentScreen == creditScreen) {
 			drawCreditScreen(g);
-
 		}
 
 		repaint();
@@ -149,22 +167,31 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			currentScreen = titleScreen;
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_W) {
+		if (currentScreen == GameScreen)
+		{
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			up = true;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_S) {
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			down = true;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = true;
 			sword.isRight = false;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_D) {
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			right = true;
 			sword.isRight = true;
 		}
+		
 		if (e.getKeyCode() == KeyEvent.VK_K) {
 			key.hasKey = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_L) {
+			player.health++;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_O) {
+			currentScreen++;
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
@@ -173,22 +200,23 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			startAttack = ticks;
 			holdingSpaceBar = true;
 		}
+		}
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getKeyCode() == KeyEvent.VK_W) {
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			up = false;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_S) {
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			down = false;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = false;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_D) {
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			right = false;
 		}
 
@@ -202,6 +230,25 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		ticks++;
+		
+		
+		
+		//System.out.println(up  + " "+ down + " " +left + " " +right + player.x + " " + player.y);
+		
+		if (up) {
+			player.y -= player.speed;
+		}
+		if (down) {
+			player.y += player.speed;
+		}
+		if (left) {
+			player.x -= player.speed;
+		}
+		if (right) {
+			player.x += player.speed;
+		}
+
+		
 
 		if (player.y < 0) {
 			if (currentAreaY == 0 || (BGImage[currentAreaX][currentAreaY - 1] == null)) {
@@ -249,19 +296,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 				currentAreaX++;
 			}
 
-		}
-
-		if (up) {
-			player.y -= player.speed;
-		}
-		if (down) {
-			player.y += player.speed;
-		}
-		if (left) {
-			player.x -= player.speed;
-		}
-		if (right) {
-			player.x += player.speed;
 		}
 
 		if (ticks - startAttack > 100) {

@@ -14,27 +14,31 @@ public class ObjectManager {
 
 	// Y1
 	boolean spawnedY1 = false;
-	public boolean clearedY1 = false;
+	public static boolean clearedY1 = false;
 	Monster Y1M1 = new Monster(100, 300, 100, 100, 0);
 	Monster Y1M2 = new Monster(100, 100, 100, 100, 0);
-	Monster Y1M3 = new Monster(300, 300, 100, 100, 0);
-	Monster Y1M4 = new Monster(300, 100, 100, 100, 0);
+	Monster Y1M3 = new Monster(300, 300, 100, 100, 1);
+	Monster Y1M4 = new Monster(300, 100, 100, 100, 1);
+	ArrayList<Monster> M1 = new ArrayList<Monster>();
 
+	
 	// Y2
 	boolean spawnedY2 = false;
-	public boolean clearedY2 = false;
+	public static boolean clearedY2 = false;
 	Monster Y2M1 = new Monster(100, 300, 100, 100, 0);
 	Monster Y2M2 = new Monster(100, 100, 100, 100, 0);
-	Monster Y2M3 = new Monster(300, 300, 100, 100, 0);
-	Monster Y2M4 = new Monster(300, 100, 100, 100, 0);
-
-	// Y2
+	Monster Y2M3 = new Monster(300, 300, 100, 100, 1);
+	Monster Y2M4 = new Monster(300, 100, 100, 100, 1);
+	ArrayList<Monster> M2 = new ArrayList<Monster>();
+	
+	// Y3
 	boolean spawnedY3 = false;
-	public boolean clearedY3 = false;
+	public static boolean clearedY3 = false;
 	Monster Y3M1 = new Monster(100, 300, 100, 100, 0);
-	Monster Y3M2 = new Monster(100, 100, 100, 100, 0);
-	Monster Y3M3 = new Monster(100, 500, 100, 100, 0);
-
+	Monster Y3M2 = new Monster(100, 100, 100, 100, 1);
+	Monster Y3M3 = new Monster(100, 500, 100, 100, 1);
+	ArrayList<Monster> M3 = new ArrayList<Monster>();
+	
 	ArrayList<Monster> Monsters = new ArrayList<Monster>();
 
 	public ObjectManager(Player p, Sword sword, WiseMan man, Key key, Boss boss) {
@@ -90,6 +94,7 @@ public class ObjectManager {
 			if (Monsters.get(i).health < 1) {
 				Monsters.get(i).isAlive = false;
 				Monsters.remove(i);
+				p.playerScore++;
 			}
 		}
 		if (man.health < 1) {
@@ -129,11 +134,7 @@ public class ObjectManager {
 	}
 
 	public void manageRoom() {
-		// System.out.println("X:" +GamePanel.currentAreaX + " Y:"
-		// +GamePanel.currentAreaY);
-		if (!p.isAlive) {
-			System.out.println("YOU ARE DEAD!");
-		}
+		
 
 		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 0) {
 			if (!spawnedY1) {
@@ -145,13 +146,31 @@ public class ObjectManager {
 
 			}
 
+			if(GamePanel.ticks % 10 == 0) {
 			for (Monster m : Monsters) {
+			
 				if (m.moveType == 0) {
 
 				} else if (m.moveType == 1) {
-					// m.setX(m.getX() - ((m.getX() - p.getX()) / 99));
-					// m.setY(m.getY() - ((m.getY() - p.getY()) / 99));
+					//System.out.println("Player- x: " + p.getX() + " y: " + p.getY());
+					//System.out.println("Monster- x: " + m.getX()+ " y: "+ m.getY());
+					
+					if (p.getX() - m.getX() < 0) {
+						m.setX((m.getX() - 1));
+					}
+					else if (p.getX() - m.getX() > 0){
+						m.setX((m.getX() + 1));
+					}
+					
+					if (p.getY() - m.getY() < 0) {
+						m.setY(m.getY() - 1);
+					}
+					else if (p.getY() - m.getY() > 0){
+						m.setY(m.getY() + 1);
+					}
+
 				}
+			}
 			}
 
 			if (!Y1M1.isAlive && !Y1M2.isAlive && !Y1M3.isAlive && !Y1M4.isAlive) {
@@ -175,8 +194,19 @@ public class ObjectManager {
 				if (m.moveType == 0) {
 
 				} else if (m.moveType == 1) {
-					m.setX(m.getX() - ((m.getX() - p.getX()) / 99));
-					m.setY(m.getY() - ((m.getY() - p.getY()) / 99));
+					if (p.getX() - m.getX() < 0) {
+						m.setX((m.getX() - 1));
+					}
+					else if (p.getX() - m.getX() > 0){
+						m.setX((m.getX() + 1));
+					}
+					
+					if (p.getY() - m.getY() < 0) {
+						m.setY(m.getY() - 1);
+					}
+					else if (p.getY() - m.getY() > 0){
+						m.setY(m.getY() + 1);
+					}
 				}
 			}
 
@@ -228,13 +258,22 @@ public class ObjectManager {
 
 		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 2) {
 			key.hasKey = false;
+			
+			if (p.collisionBox.intersects(boss.collisionBox) && !p.isHurt) {
+				p.health--;
+				p.isHurt = true;
+				monsterAtt = GamePanel.ticks;
+			}
+
 			if (sword.box.intersects(boss.collisionBox)) {
 				if (sword.hasSword && sword.isAttacking) {
 					sword.update();
 					boss.health -= 1;
+					System.out.println("Boss Health: " + boss.health);
 					sword.isAttacking = false;
 				}
 			}
+			
 			if (!spawnedY3) {
 				addMonster(Y3M1);
 				addMonster(Y3M2);
@@ -247,7 +286,19 @@ public class ObjectManager {
 				if (m.moveType == 0) {
 
 				} else if (m.moveType == 1) {
-
+					if (p.getX() - m.getX() < 0) {
+						m.setX((m.getX() - 1));
+					}
+					else if (p.getX() - m.getX() > 0){
+						m.setX((m.getX() + 1));
+					}
+					
+					if (p.getY() - m.getY() < 0) {
+						m.setY(m.getY() - 1);
+					}
+					else if (p.getY() - m.getY() > 0){
+						m.setY(m.getY() + 1);
+					}
 				}
 			}
 

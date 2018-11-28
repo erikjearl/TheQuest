@@ -5,11 +5,13 @@ public class Player extends GameObject {
 	int speed;
 	int health;
 	boolean isHurt;
+	static int playerScore;
 
 	public Player(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		speed = 7;
 		health = 3;
+		playerScore =0;
 	}
 
 	void update() {
