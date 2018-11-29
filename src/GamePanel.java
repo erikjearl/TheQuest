@@ -47,7 +47,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	ObjectManager objMan;
 	Player player = new Player(350, 350, 50, 50);
 	Sword sword = new Sword(player.x, player.y);
-	WiseMan wiseMan = new WiseMan(600, 325);
+	WiseMan wiseMan = new WiseMan(600, 300);
 	Key key = new Key(player.x, player.y - 25, 30, 15);
 	Boss boss = new Boss(200, 400, 300, 300);
 
@@ -199,6 +199,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		if (e.getKeyCode() == KeyEvent.VK_O) {
 			currentScreen++;
 			System.out.println("skip");
+		}
+		if (e.getKeyCode() == KeyEvent.VK_I) {
+			objMan.finalTalk = true;
+			System.out.println("boss dead");
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {

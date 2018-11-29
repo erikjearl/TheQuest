@@ -2,8 +2,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class WiseMan extends GameObject{
-	static int width =50;
-	static int height = 75;
+	static int width =65;
+	static int height = 120;
 	int health;
 	boolean isAlive;
 	
@@ -21,6 +21,13 @@ public class WiseMan extends GameObject{
 	void draw(Graphics g) {
 		g.setColor(Color.white);
 		g.fillRect(x, y, width, height);
+	}
+	
+	public int getHealth(){
+		return health;
+	}
+	public void setHealth(int health) {
+		this.health = health;
 	}
 	
 	

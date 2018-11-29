@@ -43,6 +43,16 @@ public class ObjectManager {
 	Monster Y3M2 = new Monster(100, 250, 100, 100, 1);
 	Monster Y3M3 = new Monster(600, 275, 100, 100, 1);
 	
+	// Y4
+		boolean spawnedY4 = false;
+		public static boolean clearedY4 = false;
+		Monster Y4M1 = new Monster(300, 100, 100, 100, 0);
+		Monster Y4M2 = new Monster(300, 550, 100, 100, 0);
+		Monster Y4M3 = new Monster(100, 300, 100, 100, 2);
+		Monster Y4M4 = new Monster(400, 300, 100, 100, 2);
+		Monster Y4M5 = new Monster(375, 375, 100, 100, 1);
+
+	
 	ArrayList<Monster> Monsters = new ArrayList<Monster>();
 
 	public ObjectManager(Player p, Sword sword, WiseMan man, Key key, Boss boss) {
@@ -67,12 +77,9 @@ public class ObjectManager {
 	}
 
 	void draw(Graphics g) {
-		p.draw(g);
+	
 		boss.draw(g);
 
-		if (sword.hasSword) {
-			sword.draw(g);
-		}
 		if (man.isAlive) {
 			man.draw(g);
 		}
@@ -85,6 +92,12 @@ public class ObjectManager {
 			m.draw(g);
 		}
 
+		p.draw(g);
+		
+		if (sword.hasSword) {
+			sword.draw(g);
+		}
+		
 		manageRoom();
 
 	}
@@ -229,7 +242,7 @@ public class ObjectManager {
 		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 2) {
 			key.hasKey = false;
 			
-			if (p.collisionBox.intersects(boss.collisionBox) && !p.isHurt) {
+			if (p.collisionBox.intersects(boss.collisionBox) && !p.isHurt && boss.isAlive) {
 				p.health--;
 				p.isHurt = true;
 				monsterAtt = GamePanel.ticks;
@@ -254,7 +267,7 @@ public class ObjectManager {
 			moveMonsters();
 			
 			
-			if(GamePanel.ticks % 11  == 0 && boss.isDisplayed) {
+			if(GamePanel.ticks % 11  == 0 && boss.isAlive) {
 				if(bCurrent == 1 && boss.getX() <  (TheQuest.width - boss.width)) {
 						boss.setX((boss.getX() + bCurrent));
 				}
@@ -279,15 +292,40 @@ public class ObjectManager {
 			spawnedY3 = false;
 			boss.isDisplayed = false;
 		}
+		
+		if (GamePanel.currentAreaX == 3 && GamePanel.currentAreaY == 1) {
+			man.isAlive = true;
+			if (!spawnedY4) {
+				addMonster(Y4M1);
+				addMonster(Y4M2);
+				addMonster(Y4M3);
+				addMonster(Y4M4);
+				addMonster(Y4M5);
+				spawnedY4 = true;
+
+			}
+
+			moveMonsters();
+
+			if (!Y4M1.isAlive && !Y4M2.isAlive && !Y4M3.isAlive && !Y4M4.isAlive && !Y4M5.isAlive && !man.isAlive) {
+				clearedY4 = true;
+			}
+
+		} else {
+			spawnedY4 = false;
+		}
+		
+	
 	}
 	
 	int dCurrent;
 	int bCurrent;
+	boolean moved = false;
 	Random r = new Random();
 	public void moveMonsters() {
-//		if(r.nextInt(2) == 0) {dCurrent = (-1);}
-//		else { dCurrent= 1;}
+
 			for (Monster m : Monsters) {
+				
 				if (m.moveType == 0) {
 					if(GamePanel.ticks % 2  == 0) {
 						if(dCurrent == 1 && m.getX() <  (TheQuest.width - m.width)) {
@@ -299,6 +337,24 @@ public class ObjectManager {
 						
 						if(dCurrent == -1 && m.getX() >  0) {
 							m.setX((m.getX() + dCurrent));
+						}
+						else {
+							dCurrent =1;
+						}
+						
+					}
+				}
+				if (m.moveType == 2) {
+					if(GamePanel.ticks % 2  == 0) {
+						if(dCurrent == 1 && m.getY() <  (TheQuest.height - m.height)) {
+								m.setY((m.getY() + dCurrent));
+						}
+						else {
+							dCurrent =-1;
+						}
+						
+						if(dCurrent == -1 && m.getY() >  0) {
+							m.setY((m.getY() + dCurrent));
 						}
 						else {
 							dCurrent =1;
