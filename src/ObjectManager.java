@@ -54,6 +54,7 @@ public class ObjectManager {
 
 	
 	ArrayList<Monster> Monsters = new ArrayList<Monster>();
+	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
 	public ObjectManager(Player p, Sword sword, WiseMan man, Key key, Boss boss) {
 		this.p = p;
@@ -98,12 +99,19 @@ public class ObjectManager {
 			sword.draw(g);
 		}
 		
+		for (Projectile proj : projectiles) {
+			proj.draw(g);
+		}
+		
 		manageRoom();
 
 	}
 
 	void addMonster(Monster m) {
 		Monsters.add(m);
+	}
+	void addProjectile(Projectile p) {
+		projectiles.add(p);
 	}
 
 	void purgeObjects() {
@@ -114,6 +122,12 @@ public class ObjectManager {
 				Player.playerScore++;
 			}
 		}
+		for(Projectile proj: projectiles) {
+			if (proj.isAlive) {
+				projectiles.remove(proj);
+			}
+		}
+		
 		if (man.health < 1) {
 			man.isAlive = false;
 		}
@@ -282,6 +296,10 @@ public class ObjectManager {
 					bCurrent =1;
 				}			
 				
+			}
+			if(GamePanel.ticks % 100  == 0 && boss.isAlive) {
+				System.out.println("add");
+				//addProjectile(new Projectile((boss.x + (boss.width/2)),(boss.y + (boss.height/2)),10,10));
 			}
 
 			if (!Y3M1.isAlive && !Y3M2.isAlive && !Y3M3.isAlive && !boss.isAlive) {
