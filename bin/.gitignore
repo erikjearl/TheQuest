@@ -8,10 +8,11 @@
 /Monster.class
 /ObjectManager.class
 /Player.class
+/Projectile.class
 /PurpleRoom.png
 /RedRoom.png
+/StoneFloor.png
 /Sword.class
 /TheQuest.class
 /WiseMan.class
-/StoneFloor.png
-/Projectile.class
+/Zombie.class

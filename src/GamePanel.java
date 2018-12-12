@@ -204,6 +204,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			objMan.finalTalk = true;
 			System.out.println("boss dead");
 		}
+		
 
 		if (e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
 			sword.update();

@@ -9,7 +9,7 @@ public class WiseMan extends GameObject{
 	
 	public WiseMan(int x, int y) {
 		super(x, y, width, height);
-		health = 5000;
+		health = 9999;
 		isAlive = false;
 	}
 	
