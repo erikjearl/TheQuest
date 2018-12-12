@@ -4,12 +4,15 @@ import java.awt.Graphics;
 public class Zombie extends GameObject{
 	int health;
 	boolean isAlive;
-	
-	public Zombie(int x, int y, int width, int height) {
+	int type;
+	public Zombie(int x, int y, int width, int height, int type) {
 		super(x, y, width, height);
 		// TODO Auto-generated constructor stub
-		health = 25;
 		isAlive = true;
+		this.type = type;
+		if(type ==3) {
+			health =999;
+		} else {health = 25;}
 	}
 
 		void update() {

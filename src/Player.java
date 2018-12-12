@@ -28,7 +28,7 @@ public class Player extends GameObject {
 
 		g.setColor(Color.RED);
 		for(int i =0; i < health; i++) {
-			g.fillRect(710 - (25 *i), 21, 20, 20);
+			g.fillRect(710 - (25 *i), 17, 20, 20);
 		}
 		
 	}

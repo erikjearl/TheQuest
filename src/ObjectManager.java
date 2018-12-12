@@ -13,6 +13,9 @@ public class ObjectManager {
 	boolean secondTalk;
 	boolean thirdTalk;
 	boolean finalTalk;
+	boolean merchant1;
+	boolean walkedIn;
+	boolean talkedZ;
 	long monsterAtt = 0;
 	long manHurt = 0;
 	long bossHurt = 0;
@@ -44,8 +47,9 @@ public class ObjectManager {
 	Monster Y3M3 = new Monster(600, 275, 100, 100, 1);
 	
 	// Y4
+		Zombie z1 = new Zombie(-5,360, 70,90,3);
 		boolean spawnedY4 = false;
-		boolean lotsZombies = false;
+		boolean lotsOfZombies = false;
 		public static boolean clearedY4 = false;
 		Monster Y4M1 = new Monster(300, 100, 100, 100, 0);
 		Monster Y4M2 = new Monster(300, 550, 100, 100, 0);
@@ -164,6 +168,15 @@ public class ObjectManager {
 		for (int i = 0; i < monsters.size(); i++) {
 			monsters.remove(i);
 		}
+		for (int i = 0; i < zombies.size(); i++) {
+			if(zombies.get(i).type ==0) {
+				zombies.remove(i);
+			}
+		}
+		for (Projectile proj : projectiles) {
+			proj.isAlive = false;
+		}
+		
 	}
 
 	void checkCollision() {
@@ -180,7 +193,7 @@ public class ObjectManager {
 			}
 		}
 		for (Zombie zomb : zombies) {
-			if (p.collisionBox.intersects(zomb.collisionBox) && !p.isHurt) {
+			if (p.collisionBox.intersects(zomb.collisionBox) && !p.isHurt && zomb.type != 3) {
 				p.health--;
 				p.isHurt = true;
 				monsterAtt = GamePanel.ticks;
@@ -247,12 +260,23 @@ public class ObjectManager {
 			spawnedY2 = false;
 		}
 
-		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 1) {
+		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 1) { //middle
 			purgeAllMonsters();
-			for (Projectile proj : projectiles) {
-				proj.isAlive = false;
+			if(walkedIn) {
+				z1.x= 300;
+				if(!talkedZ) {
+					talkedZ = true;
+					JOptionPane.showMessageDialog(null, "Zombie King: Im looking to betray the wizard who stole my people..."
+							+ " so if you want to buy some extra lives for points you can hit me and the deal is on");
+				}
 			}
+			
 		}
+		
+		if(talkedZ && (GamePanel.currentAreaX != 1 || GamePanel.currentAreaY != 1)) {
+			z1.isAlive=false;
+		}
+		
 		if (GamePanel.currentAreaX == 2 && GamePanel.currentAreaY == 1) {
 			if(!finalTalk) {
 				man.isAlive = true;
@@ -294,7 +318,23 @@ public class ObjectManager {
 				
 
 			}
-		} else if (GamePanel.currentAreaX != 3 && GamePanel.currentAreaY != 1) {
+			if(finalTalk) {
+				if(GamePanel.ticks % 10  == 0) {
+						if(!walkedIn && z1.x < 200) {
+							z1.x++;
+						}
+						else {
+							walkedIn = true;
+							z1.x--;
+						}
+					
+				}
+				if(!merchant1) {
+					addZombie(z1);
+					merchant1 = true;
+				}
+			}
+		} else if (GamePanel.currentAreaX != 3 || GamePanel.currentAreaY != 1) {
 			man.isAlive = false;
 		}
 
@@ -302,8 +342,8 @@ public class ObjectManager {
 			key.hasKey = false;
 			
 			if (p.collisionBox.intersects(boss.collisionBox) && !p.isHurt && boss.isAlive) {
-				p.health--;
 				p.isHurt = true;
+				p.health--;
 				monsterAtt = GamePanel.ticks;
 			}
 
@@ -370,27 +410,44 @@ public class ObjectManager {
 				man.setHealth(1500);
 				spawnedY4 = true;
 			}
+			if (sword.box.intersects(man.collisionBox)) {
+				if (sword.hasSword && Sword.isAttacking) {
+					sword.update();
+					man.health -= 1;
+					System.out.println("Man's Health: " +man.health);
+				}
+			}
+			if (p.collisionBox.intersects(man.collisionBox)&& !p.isHurt && man.isAlive) {
+				p.isHurt = true;
+				p.health--;
+				monsterAtt = GamePanel.ticks;
+			}
 
 			moveMonsters();
 			manageZombies();
-			if(GamePanel.ticks % 200  == 0 && boss.isAlive) {
-				addProjectile(new Projectile(man.x + (man.width/2),man.y + (man.height/2),15,15, p.getX(),p.getY()));
+			if(GamePanel.ticks % 200  == 0 && man.isAlive) {
+				addProjectile(new Projectile(man.x + (WiseMan.width/2),man.y + (WiseMan.height/2),15,15, p.getX(),p.getY()));
 				GamePanel.ticks++;
 			}
 			moveProjectiles();
 			if(man.getHealth()<500) {
-				if(!lotsZombies) {
-					addZombie(new Zombie(450,300, 30,30));
-					addZombie(new Zombie(450,500, 30,30));
-					addZombie(new Zombie(450,700, 30,30));
-					addZombie(new Zombie(600,300, 30,30));
-					addZombie(new Zombie(600,500, 30,30));
-					addZombie(new Zombie(600,700, 30,30));
-					addZombie(new Zombie(200,300, 30,30));
-					addZombie(new Zombie(200,500, 30,30));
-					addZombie(new Zombie(200,700, 30,30));
-					lotsZombies= true;
+				if(!lotsOfZombies) {
+					addZombie(new Zombie(450,150, 30,30,0));
+					addZombie(new Zombie(450,360, 30,30,0));
+					addZombie(new Zombie(450,550, 30,30,0));
+					addZombie(new Zombie(600,150, 30,30,0));
+					addZombie(new Zombie(600,360, 30,30,0));
+					addZombie(new Zombie(600,550, 30,30,0));
+					
+					addZombie(new Zombie(50,90, 40,50,1));
+					addZombie(new Zombie(50,660, 40,50,1));
+					lotsOfZombies= true;
 				}
+				if(GamePanel.ticks % 125  == 0 && man.isAlive) {
+					addProjectile(new Projectile(man.x + (WiseMan.width/2),man.y + (WiseMan.height/2),15,15, p.getX(),p.getY()));
+					GamePanel.ticks++;
+				}
+				
 			}
 
 			if (!Y4M1.isAlive && !Y4M2.isAlive && !Y4M3.isAlive && !Y4M4.isAlive && !Y4M5.isAlive && !man.isAlive) {
@@ -471,7 +528,7 @@ public class ObjectManager {
 		public void moveProjectiles() {
 		
 			for (Projectile proj : projectiles) {
-				if(GamePanel.ticks % 10 == 0) {
+				if(GamePanel.ticks % 7 == 0) {
 					if(proj.Xmovement == 0 && proj.Ymovement == 0) {
 						proj.Xmovement = (proj.getTargetX() - proj.getX())/150;
 						proj.Ymovement = (proj.getTargetY() - proj.getY())/150;
@@ -483,16 +540,22 @@ public class ObjectManager {
 				}
 			}
 		}
-		
+		int spawnTimer=600;
 		public void manageZombies() {
-			if(GamePanel.ticks % 1000 == 0 && man.isAlive) {
-				addZombie(new Zombie(man.x,man.y - 55, 30,30));
-				addZombie(new Zombie(man.x-55,man.y+45, 30,30));
-				addZombie(new Zombie(man.x,man.y+ 155, 30,30));
+			if(GamePanel.ticks % spawnTimer == 0 && man.isAlive) {
+				addZombie(new Zombie(man.x,man.y - 75, 30,30,0));
+				addZombie(new Zombie(man.x-65,man.y+45, 30,30,0));
+				addZombie(new Zombie(man.x,man.y+ 175, 30,30,0));
+				if(lotsOfZombies) {
+					addZombie(new Zombie(100,100, 30,30,0));
+					addZombie(new Zombie(100,630, 30,30,0));
+					spawnTimer = 300;
+				}
+				
 				GamePanel.ticks++;
 			}
 			for (Zombie zomb : zombies) {
-				if(GamePanel.ticks % 10 == 0) {						
+				if(GamePanel.ticks % 4 == 0 && zomb.type == 0) {						
 					if (p.getX() - zomb.getX() < 0) {
 						zomb.setX((zomb.getX() - 1));
 					}
@@ -506,8 +569,16 @@ public class ObjectManager {
 					else if (p.getY() - zomb.getY() > 0){
 						zomb.setY(zomb.getY() + 1);
 					}
-				}
+				} else if (GamePanel.ticks % 75  == 0 && (zomb.type ==1 && zomb.isAlive)) {
+						addProjectile(new Projectile(zomb.x + (zomb.width/2),zomb.y + (zomb.height/2),15,15, p.getX(),p.getY()));
+						System.out.println(zomb.y);
+						//GamePanel.ticks++;
+					}
+				
+			
 			}
+			
+			
 		}
 
 

@@ -105,13 +105,15 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	}
 
 	void drawGameScreen(Graphics g) {
-		
 		updateGameScreen();
+		
 		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH - 1, HEIGHT - 2, null);
 		objMan.checkCollision();
 		objMan.purgeObjects();
 		objMan.update();
 		objMan.draw(g);
+		g.setFont(subFont);
+		g.drawString("" + Player.playerScore, 10, 29);
 
 	}
 
@@ -204,6 +206,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			objMan.finalTalk = true;
 			System.out.println("boss dead");
 		}
+		if (e.getKeyCode() == KeyEvent.VK_P) {
+			objMan.purgeAllMonsters();
+			System.out.println("killed monsters");
+		}
+		if (e.getKeyCode() == KeyEvent.VK_U) {
+			objMan.man.health = 499;
+			System.out.println("boss reducted");
+		}
 		
 
 		if (e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
@@ -294,7 +304,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		}
 
 		if (player.x < 0) {
-			if (currentAreaX == 0 || currentAreaX==3 || (BGImage[currentAreaX - 1][currentAreaY] == null)) {
+			if (currentAreaX == 0 || (currentAreaX==3 && wiseMan.isAlive) || (BGImage[currentAreaX - 1][currentAreaY] == null)) {
 				//left = false;
 				player.x = 1;
 			} else {
