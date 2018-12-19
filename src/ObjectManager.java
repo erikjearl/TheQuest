@@ -1,5 +1,8 @@
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -10,16 +13,25 @@ public class ObjectManager {
 	Key key;
 	WiseMan man;
 	Boss boss;
+	Font textFont = new Font("Comic Sans", Font.PLAIN, 16);
+	
+	long monsterAtt = 0;
+	long manHurt = 0;
+	long bossHurt = 0;
+	Date startString = new Date();
+	Date now;
+
+	
+	
+	//check
+	boolean welcome;
 	boolean secondTalk;
 	boolean thirdTalk;
 	boolean finalTalk;
 	boolean merchant1;
 	boolean walkedIn;
 	boolean talkedZ;
-	long monsterAtt = 0;
-	long manHurt = 0;
-	long bossHurt = 0;
-
+	
 	// Y1
 	boolean spawnedY1 = false;
 	public static boolean clearedY1 = false;
@@ -117,9 +129,7 @@ public class ObjectManager {
 			sword.draw(g);
 		}
 		
-		
-		
-		manageRoom();
+		manageRoom(g);
 
 	}
 
@@ -218,9 +228,10 @@ public class ObjectManager {
 		}
 
 	}
-
-	public void manageRoom() {
-		
+	
+	public void manageRoom(Graphics g) {
+				now = new Date();
+				drawString(g,"Welcome to the quest, here you will find monsters and adventures,","you should probly go check with the old man to see what your job is");
 
 		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 0) {
 			if (!spawnedY1) {
@@ -229,9 +240,8 @@ public class ObjectManager {
 				addMonster(Y1M3);
 				addMonster(Y1M4);
 				spawnedY1 = true;
-
+				
 			}
-
 			moveMonsters();
 
 			if (!Y1M1.isAlive && !Y1M2.isAlive && !Y1M3.isAlive && !Y1M4.isAlive) {
@@ -266,9 +276,12 @@ public class ObjectManager {
 				z1.x= 300;
 				if(!talkedZ) {
 					talkedZ = true;
-					JOptionPane.showMessageDialog(null, "Zombie King: Im looking to betray the wizard who stole my people..."
-							+ " so if you want to buy some extra lives for points you can hit me and the deal is on");
+					//JOptionPane.showMessageDialog(null, "Zombie King: Im looking to betray the wizard who stole my people..."
+						//	+ " so if you want to buy some extra lives for points you can hit me and the deal is on");
+					//now = new Date();
 				}
+				//drawString(g,"Im looking to betray the wizard who stole my people...","so if you want to buy some extra lives for points you can hit me and the deal is on");
+				
 			}
 			
 		}
@@ -296,9 +309,12 @@ public class ObjectManager {
 				if (!sword.hasSword) {
 					sword.hasSword = true;
 					System.out.println("SWORD");
-					JOptionPane.showMessageDialog(null, "Here is a Sword to help you on your journey");
+					//JOptionPane.showMessageDialog(null, "Here is a Sword to help you on your journey");
+					now = new Date();
+					drawString(g,"Here is a Sword to help you on your journey","");
 				}
-
+			
+				
 				if (clearedY1 && clearedY2 && !thirdTalk) {
 					key.hasKey = true;
 					thirdTalk=true;
@@ -579,6 +595,26 @@ public class ObjectManager {
 			}
 			
 			
+		}
+		
+		
+		public void drawString(Graphics g, String text1, String text2) {
+			g.setFont(textFont);
+			//System.out.println(text1+" " +text2);
+			if(now.getTime() - startString.getTime() < 4000) {
+				System.out.println(text1+" " +text2);
+				g.setColor(Color.black);
+				g.fillRect(0, 675, 750, 75);
+				g.setColor(Color.white);
+				g.fillRect(2, 677, 746, 71);
+				g.setColor(Color.BLACK);
+				if(text2 == "") {
+					g.drawString(text1, 45, 675);
+				} else {
+					g.drawString(text1, 45, 705);
+					g.drawString(text2, 45, 730);	
+				}
+			}
 		}
 
 

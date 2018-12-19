@@ -11,7 +11,7 @@ public class Zombie extends GameObject{
 		isAlive = true;
 		this.type = type;
 		if(type ==3) {
-			health =999;
+			health =9999;
 		} else {health = 25;}
 	}
 
