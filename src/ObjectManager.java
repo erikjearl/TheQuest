@@ -24,13 +24,49 @@ public class ObjectManager {
 	
 	
 	//check
-	boolean welcome;
-	boolean secondTalk;
-	boolean thirdTalk;
-	boolean finalTalk;
-	boolean merchant1;
-	boolean walkedIn;
-	boolean talkedZ;
+	boolean welcome = false;
+	boolean secondTalk= false;
+	boolean thirdTalk= false;
+	boolean finalTalk= false;
+	boolean merchant1= false;
+	boolean walkedIn= false;
+	boolean talkedZ= false;
+	
+	// text box
+	private static final int WELCOME_STRING = 1;
+	private static final String welcomeString1 = "Welcome to the quest, here you will find monsters and adventures,";
+	private static final String welcomeString2 = "you should probly go check with the old man to see what your job is";
+	
+	private static final int SWORD_STRING = 2;
+	private static final String swordString1 = "Here is a Sword to help you on your journey";
+	private static final String swordString2 = "";
+	
+	private static final int SECOND_STRING = 3;
+	private static final String secondString1 = "Well done killing the monsters, return to me once they are all dead for a key";
+	private static final String secondString2 = "";
+	
+	private static final int THIRD_STRING = 4;
+	private static final String thirdString1 = "You have proven your self worthy of this key, take it and challenge the boss";
+	private static final String thirdString2 = "";
+	
+	private static final int FINAL_STRING = 5;
+	private static final String finalString1 = "That was all easy, looking for a real challenge? Try fighting me!";
+	private static final String finalString2 = "";
+	
+	private static final int M_STRING = 6;
+	private static final String mString1 = "Hey you!";
+	private static final String mString2 = "follow me if you want some help";
+	
+	private static final int MERCHANT_STRING = 7;
+	private static final String merchantString1 = "Im looking to betray the wizard who stole my people...";
+	private static final String merchantString2 = "so if you want to buy some extra lives for points you can hit me and the deal is on";
+	
+	private static final int ENDING_STRING = 8;
+	private static final String endingString1 = "you won";
+	private static final String endingString2 = "";
+	
+	private int stringState = WELCOME_STRING;
+	
 	
 	// Y1
 	boolean spawnedY1 = false;
@@ -230,9 +266,14 @@ public class ObjectManager {
 	}
 	
 	public void manageRoom(Graphics g) {
-				now = new Date();
-				drawString(g,"Welcome to the quest, here you will find monsters and adventures,","you should probly go check with the old man to see what your job is");
-
+			now = new Date();
+			if(stringState != WELCOME_STRING && !welcome) {
+			startString = new Date();
+			stringState = WELCOME_STRING;
+			welcome = true;
+			}
+			drawString(g);
+		
 		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 0) {
 			if (!spawnedY1) {
 				addMonster(Y1M1);
@@ -240,7 +281,6 @@ public class ObjectManager {
 				addMonster(Y1M3);
 				addMonster(Y1M4);
 				spawnedY1 = true;
-				
 			}
 			moveMonsters();
 
@@ -275,12 +315,10 @@ public class ObjectManager {
 			if(walkedIn) {
 				z1.x= 300;
 				if(!talkedZ) {
+					System.out.println("now");
 					talkedZ = true;
-					//JOptionPane.showMessageDialog(null, "Zombie King: Im looking to betray the wizard who stole my people..."
-						//	+ " so if you want to buy some extra lives for points you can hit me and the deal is on");
-					//now = new Date();
+					makeText(MERCHANT_STRING);
 				}
-				//drawString(g,"Im looking to betray the wizard who stole my people...","so if you want to buy some extra lives for points you can hit me and the deal is on");
 				
 			}
 			
@@ -306,37 +344,28 @@ public class ObjectManager {
 				}
 			}
 			if (p.collisionBox.intersects(man.collisionBox)) {
-				if (!sword.hasSword) {
-					sword.hasSword = true;
-					System.out.println("SWORD");
-					//JOptionPane.showMessageDialog(null, "Here is a Sword to help you on your journey");
-					now = new Date();
-					drawString(g,"Here is a Sword to help you on your journey","");
-				}
-			
 				
-				if (clearedY1 && clearedY2 && !thirdTalk) {
+				if (!sword.hasSword) {
+					makeText(SWORD_STRING);
+				} else if (clearedY1 && clearedY2 && !thirdTalk) {
 					key.hasKey = true;
 					thirdTalk=true;
-					JOptionPane.showMessageDialog(null,
-							"You have proven your self worthy of this key, take it and challenge the boss");
+					makeText(THIRD_STRING);
 				} else if ((clearedY1 || clearedY2) && !secondTalk && !thirdTalk) {
 					secondTalk = true;
-					JOptionPane.showMessageDialog(null,
-							"Well Done killing the monsters, return to me once they are all dead for a key");
+					makeText(SECOND_STRING);
 				}  else if (clearedY3 && !finalTalk) {
 					finalTalk= true;
-					JOptionPane.showMessageDialog(null,
-							"That was all easy, looking for a real challenge? Try fighting me!");
+					makeText(FINAL_STRING);
 					p.health+= 2;
-					
 				}
 				
 
 			}
 			if(finalTalk) {
+				makeText(M_STRING);
 				if(GamePanel.ticks % 10  == 0) {
-						if(!walkedIn && z1.x < 200) {
+					if(!walkedIn && z1.x < 200) {
 							z1.x++;
 						}
 						else {
@@ -476,6 +505,7 @@ public class ObjectManager {
 		
 	
 	}
+
 	
 	int dCurrent;
 	int bCurrent;
@@ -597,24 +627,74 @@ public class ObjectManager {
 			
 		}
 		
-		
-		public void drawString(Graphics g, String text1, String text2) {
-			g.setFont(textFont);
-			//System.out.println(text1+" " +text2);
-			if(now.getTime() - startString.getTime() < 4000) {
-				System.out.println(text1+" " +text2);
-				g.setColor(Color.black);
-				g.fillRect(0, 675, 750, 75);
-				g.setColor(Color.white);
-				g.fillRect(2, 677, 746, 71);
-				g.setColor(Color.BLACK);
-				if(text2 == "") {
-					g.drawString(text1, 45, 675);
-				} else {
-					g.drawString(text1, 45, 705);
-					g.drawString(text2, 45, 730);	
+		private void makeText(int state) {
+			now = new Date();
+			if(stringState != state) {
+				startString = new Date();
+				stringState = state;
+				sword.hasSword = true;
 				}
-			}
+		}
+		
+		public void drawString(Graphics g) {
+			String text1 = "";
+			String text2 = "";
+			g.setFont(textFont);
+				
+				if(stringState > 0 && now.getTime() - startString.getTime() < 3000) {
+					g.setColor(Color.black);
+					g.fillRect(0, 675, 750, 75);
+					g.setColor(Color.white);
+					g.fillRect(2, 677, 746, 71);
+					g.setColor(Color.BLACK);
+					
+					if (stringState == WELCOME_STRING) {
+						text1 = welcomeString1;
+						text2 = welcomeString2;
+					}
+					else if (stringState == SWORD_STRING) {
+						text1 = swordString1;
+						text2 = swordString2;
+					}
+					else if (stringState == SECOND_STRING) {
+						text1 = secondString1;
+						text2 = secondString2;
+					}
+					else if (stringState == THIRD_STRING) {
+						text1 = thirdString1;
+						text2 = thirdString2;
+					}
+					else if (stringState == FINAL_STRING) {
+						text1 = finalString1;
+						text2 = finalString2;
+					}
+					else if (stringState == M_STRING) {
+						text1 = mString1;
+						text2 = mString2;
+					}
+					else if (stringState == MERCHANT_STRING) {
+						text1 = merchantString1;
+						text2 = merchantString2;
+					}
+					else if (stringState == ENDING_STRING) {
+						text1 = endingString1;
+						text2 = endingString2;
+					}
+					
+					//System.out.println(text1+ " " +text2);
+					if(text2 == "") {
+						g.drawString(text1, 45, 715);
+					} else {
+						g.drawString(text1, 45, 705);
+						g.drawString(text2, 45, 730);	
+					}
+				
+				
+				}else {
+						stringState = 0;	
+				}
+				
+
 		}
 
 
