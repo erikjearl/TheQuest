@@ -3,7 +3,7 @@ import java.awt.Graphics;
 
 public class Player extends GameObject {
 	int speed;
-	int health;
+	static int health;
 	boolean isHurt;
 	static int playerScore;
 

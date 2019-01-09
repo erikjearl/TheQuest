@@ -61,7 +61,19 @@ public class ObjectManager {
 	private static final String merchantString1 = "Im looking to betray the wizard who stole my people...";
 	private static final String merchantString2 = "so if you want to buy some extra lives for points you can hit me and the deal is on";
 	
-	private static final int ENDING_STRING = 8;
+	private static final int BUY_STRING = 8;
+	private static final String buyString1 = "Pleasure doing buisness";
+	private static final String buyString2 = "I have more hearts for sale if you can afford the points";
+	
+	private static final int BOSS_STRING = 9;
+	private static final String bossString1 = "You killed the boss!";
+	private static final String bossString2 = "I'm sure the old man wants to reward you... go see him";
+	
+	private static final int ZOMBIESPAWN_STRING = 10;
+	private static final String zombieSpawnString1 = "Im down to 20% health";
+	private static final String zombieSpawnString2 = "Lets see if you can handle my zombie hoard";
+	
+	private static final int ENDING_STRING = 11;
 	private static final String endingString1 = "you won";
 	private static final String endingString2 = "";
 	
@@ -170,7 +182,9 @@ public class ObjectManager {
 	}
 
 	void addMonster(Monster m) {
-		monsters.add(m);
+		if(m.health>0) {
+			monsters.add(m);
+		}
 	}
 	void addProjectile(Projectile p) {
 		projectiles.add(p);
@@ -204,7 +218,7 @@ public class ObjectManager {
 			man.isAlive = false;
 		}
 
-		if (p.health <= 0) {
+		if (Player.health <= 0) {
 			p.isAlive = false;
 		}
 
@@ -228,7 +242,7 @@ public class ObjectManager {
 	void checkCollision() {
 		for (Monster m : monsters) {
 			if (p.collisionBox.intersects(m.collisionBox) && !p.isHurt) {
-				p.health--;
+				Player.health--;
 				p.isHurt = true;
 				monsterAtt = GamePanel.ticks;
 			}
@@ -240,7 +254,7 @@ public class ObjectManager {
 		}
 		for (Zombie zomb : zombies) {
 			if (p.collisionBox.intersects(zomb.collisionBox) && !p.isHurt && zomb.type != 3) {
-				p.health--;
+				Player.health--;
 				p.isHurt = true;
 				monsterAtt = GamePanel.ticks;
 			}
@@ -252,7 +266,7 @@ public class ObjectManager {
 		}
 		for (Projectile proj: projectiles) {
 			if (p.collisionBox.intersects(proj.collisionBox) && !p.isHurt) {
-				p.health--;
+				Player.health--;
 				p.isHurt = true;
 				proj.isAlive= false;
 				monsterAtt = GamePanel.ticks;
@@ -261,6 +275,15 @@ public class ObjectManager {
 		
 		if (p.isHurt && ((GamePanel.ticks - monsterAtt > 50))) {
 			p.isHurt = false;
+		}
+		
+		if (sword.box.intersects(z1.collisionBox) && z1.isAlive && Player.playerScore > 9) {
+			if (sword.hasSword && Sword.isAttacking) {
+				Sword.isAttacking = false;
+				Player.playerScore-=10;
+				Player.health++;
+				makeText(BUY_STRING);
+			}
 		}
 
 	}
@@ -273,6 +296,7 @@ public class ObjectManager {
 			welcome = true;
 			}
 			drawString(g);
+			
 		
 		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 0) {
 			if (!spawnedY1) {
@@ -283,8 +307,11 @@ public class ObjectManager {
 				spawnedY1 = true;
 			}
 			moveMonsters();
-
+			
 			if (!Y1M1.isAlive && !Y1M2.isAlive && !Y1M3.isAlive && !Y1M4.isAlive) {
+				if(!clearedY1) {
+					Player.playerScore+= (r.nextInt(10) + 1);
+				}
 				clearedY1 = true;
 			}
 
@@ -304,6 +331,9 @@ public class ObjectManager {
 			moveMonsters();
 
 			if (!Y2M1.isAlive && !Y2M2.isAlive && !Y2M3.isAlive && !Y2M4.isAlive) {
+				if(!clearedY2) {
+					Player.playerScore+= (r.nextInt(10) + 1);
+				}
 				clearedY2 = true;
 			}
 		} else {
@@ -319,9 +349,7 @@ public class ObjectManager {
 					talkedZ = true;
 					makeText(MERCHANT_STRING);
 				}
-				
 			}
-			
 		}
 		
 		if(talkedZ && (GamePanel.currentAreaX != 1 || GamePanel.currentAreaY != 1)) {
@@ -332,8 +360,10 @@ public class ObjectManager {
 			if(!finalTalk) {
 				man.isAlive = true;
 			}
-			else{
-				man.isAlive = false;
+			
+			if (clearedY3 && !finalTalk) {
+				finalTalk= true;
+				makeText(FINAL_STRING);
 			}
 			
 			if (sword.box.intersects(man.collisionBox)) {
@@ -354,23 +384,19 @@ public class ObjectManager {
 				} else if ((clearedY1 || clearedY2) && !secondTalk && !thirdTalk) {
 					secondTalk = true;
 					makeText(SECOND_STRING);
-				}  else if (clearedY3 && !finalTalk) {
-					finalTalk= true;
-					makeText(FINAL_STRING);
-					p.health+= 2;
+				} else if (finalTalk) {
+					man.isAlive = false;
 				}
-				
-
 			}
-			if(finalTalk) {
+			if(!man.isAlive) {
 				makeText(M_STRING);
 				if(GamePanel.ticks % 10  == 0) {
 					if(!walkedIn && z1.x < 200) {
-							z1.x++;
+							z1.x+=3;
 						}
 						else {
 							walkedIn = true;
-							z1.x--;
+							z1.x-=3;
 						}
 					
 				}
@@ -388,7 +414,7 @@ public class ObjectManager {
 			
 			if (p.collisionBox.intersects(boss.collisionBox) && !p.isHurt && boss.isAlive) {
 				p.isHurt = true;
-				p.health--;
+				Player.health--;
 				monsterAtt = GamePanel.ticks;
 			}
 
@@ -434,8 +460,11 @@ public class ObjectManager {
 			moveProjectiles();
 
 			if (!Y3M1.isAlive && !Y3M2.isAlive && !Y3M3.isAlive && !boss.isAlive) {
+				if(!clearedY3) {
+					Player.playerScore+= (r.nextInt(20) + 1);
+					makeText(BOSS_STRING);
+				}
 				clearedY3 = true;
-				
 			}
 
 		} else {
@@ -464,7 +493,7 @@ public class ObjectManager {
 			}
 			if (p.collisionBox.intersects(man.collisionBox)&& !p.isHurt && man.isAlive) {
 				p.isHurt = true;
-				p.health--;
+				Player.health--;
 				monsterAtt = GamePanel.ticks;
 			}
 
@@ -475,7 +504,7 @@ public class ObjectManager {
 				GamePanel.ticks++;
 			}
 			moveProjectiles();
-			if(man.getHealth()<500) {
+			if(man.getHealth() < 300) {
 				if(!lotsOfZombies) {
 					addZombie(new Zombie(450,150, 30,30,0));
 					addZombie(new Zombie(450,360, 30,30,0));
@@ -486,6 +515,8 @@ public class ObjectManager {
 					
 					addZombie(new Zombie(50,90, 40,50,1));
 					addZombie(new Zombie(50,660, 40,50,1));
+					
+					makeText(ZOMBIESPAWN_STRING);
 					lotsOfZombies= true;
 				}
 				if(GamePanel.ticks % 125  == 0 && man.isAlive) {
@@ -675,6 +706,18 @@ public class ObjectManager {
 					else if (stringState == MERCHANT_STRING) {
 						text1 = merchantString1;
 						text2 = merchantString2;
+					}
+					else if (stringState == BUY_STRING) {
+						text1 = buyString1;
+						text2 = buyString2;
+					}
+					else if (stringState == BOSS_STRING) {
+						text1 = bossString1;
+						text2 = bossString2;
+					}
+					else if (stringState == ZOMBIESPAWN_STRING) {
+						text1 = zombieSpawnString1;
+						text2 = zombieSpawnString2;
 					}
 					else if (stringState == ENDING_STRING) {
 						text1 = endingString1;

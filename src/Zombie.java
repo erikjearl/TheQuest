@@ -20,8 +20,11 @@ public class Zombie extends GameObject{
 		}
 		
 		void draw(Graphics g) {
+			if(isAlive) {
 			g.setColor(Color.cyan);
 			g.fillRect(x, y, width, height);
+			}
+			
 		}
 		
 		int getX() {

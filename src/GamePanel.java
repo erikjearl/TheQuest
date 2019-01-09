@@ -133,7 +133,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		else if(player.isAlive) {
 			g.setFont(subFont);
 			g.drawString("YOU WON!", 273, 350);
-			g.drawString("Score: " + Player.playerScore * player.health, 291, 385);
+			g.drawString("Score: " + Player.playerScore * Player.health, 291, 385);
 		}
 		
 		
@@ -196,7 +196,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			key.hasKey = true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_L) {
-			player.health++;
+			Player.health++;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_O) {
 			currentScreen++;
@@ -313,7 +313,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			}
 		}
 		if (player.x > TheQuest.width - player.width) {
-			if ((currentAreaX == 2 && !objMan.finalTalk) || currentAreaX == 3 || (BGImage[currentAreaX + 1][currentAreaY] == null)) {
+			if ((currentAreaX == 2 && !objMan.talkedZ) || currentAreaX == 3 || (BGImage[currentAreaX + 1][currentAreaY] == null)) {
 				//right = false;
 				player.x = 699;
 			} else {
