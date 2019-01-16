@@ -13,13 +13,14 @@ public class ObjectManager {
 	Key key;
 	WiseMan man;
 	Boss boss;
-	Font textFont = new Font("Comic Sans", Font.PLAIN, 16);
+	Font textFont = new Font("Herculanum", Font.PLAIN, 16);
 	
 	long monsterAtt = 0;
 	long manHurt = 0;
 	long bossHurt = 0;
 	Date startString = new Date();
 	Date now;
+	boolean talked = false;
 
 	
 	
@@ -69,12 +70,16 @@ public class ObjectManager {
 	private static final String bossString1 = "You killed the boss!";
 	private static final String bossString2 = "I'm sure the old man wants to reward you... go see him";
 	
-	private static final int ZOMBIESPAWN_STRING = 10;
-	private static final String zombieSpawnString1 = "Im down to 20% health";
-	private static final String zombieSpawnString2 = "Lets see if you can handle my zombie hoard";
+	private static final int ENTER_STRING = 10;
+	private static final String enterString1 = "Welcome to the final battle";
+	private static final String enterString2 = "Good Luck...";
 	
-	private static final int ENDING_STRING = 11;
-	private static final String endingString1 = "you won";
+	private static final int ZOMBIESPAWN_STRING = 11;
+	private static final String zombieSpawnString1 = "Im down to 20% health";
+	private static final String zombieSpawnString2 = "Lets see if you can handle my zombie army";
+	
+	private static final int ENDING_STRING = 12;
+	private static final String endingString1 = "RIP";
 	private static final String endingString2 = "";
 	
 	private int stringState = WELCOME_STRING;
@@ -345,7 +350,6 @@ public class ObjectManager {
 			if(walkedIn) {
 				z1.x= 300;
 				if(!talkedZ) {
-					System.out.println("now");
 					talkedZ = true;
 					makeText(MERCHANT_STRING);
 				}
@@ -370,7 +374,7 @@ public class ObjectManager {
 				if (sword.hasSword && Sword.isAttacking) {
 					sword.update();
 					man.health -= 1;
-					System.out.println("You hit the man");
+					//System.out.println("You hit the man");
 				}
 			}
 			if (p.collisionBox.intersects(man.collisionBox)) {
@@ -389,7 +393,10 @@ public class ObjectManager {
 				}
 			}
 			if(!man.isAlive) {
-				makeText(M_STRING);
+				if (!talked) {
+					makeText(M_STRING);
+					talked=true;
+				}
 				if(GamePanel.ticks % 10  == 0) {
 					if(!walkedIn && z1.x < 200) {
 							z1.x+=3;
@@ -405,6 +412,7 @@ public class ObjectManager {
 					merchant1 = true;
 				}
 			}
+			
 		} else if (GamePanel.currentAreaX != 3 || GamePanel.currentAreaY != 1) {
 			man.isAlive = false;
 		}
@@ -422,7 +430,7 @@ public class ObjectManager {
 				if (sword.hasSword && Sword.isAttacking) {
 					sword.update();
 					boss.health -= 1;
-					System.out.println("Boss Health: " + boss.health);
+					//System.out.println("Boss Health: " + boss.health);
 				}
 			}
 			
@@ -475,6 +483,7 @@ public class ObjectManager {
 		
 		if (GamePanel.currentAreaX == 3 && GamePanel.currentAreaY == 1) {
 			if (!spawnedY4) {
+				makeText(ENTER_STRING);
 				addMonster(Y4M1);
 				addMonster(Y4M2);
 				addMonster(Y4M3);
@@ -488,7 +497,7 @@ public class ObjectManager {
 				if (sword.hasSword && Sword.isAttacking) {
 					sword.update();
 					man.health -= 1;
-					System.out.println("Man's Health: " +man.health);
+					//System.out.println("Man's Health: " +man.health);
 				}
 			}
 			if (p.collisionBox.intersects(man.collisionBox)&& !p.isHurt && man.isAlive) {
@@ -528,6 +537,8 @@ public class ObjectManager {
 
 			if (!Y4M1.isAlive && !Y4M2.isAlive && !Y4M3.isAlive && !Y4M4.isAlive && !Y4M5.isAlive && !man.isAlive) {
 				clearedY4 = true;
+				makeText(ENDING_STRING);
+				GamePanel.currentScreen++;
 			}
 
 		} else {
@@ -648,7 +659,7 @@ public class ObjectManager {
 					}
 				} else if (GamePanel.ticks % 75  == 0 && (zomb.type ==1 && zomb.isAlive)) {
 						addProjectile(new Projectile(zomb.x + (zomb.width/2),zomb.y + (zomb.height/2),15,15, p.getX(),p.getY()));
-						System.out.println(zomb.y);
+						//System.out.println(zomb.y);
 						//GamePanel.ticks++;
 					}
 				
@@ -715,6 +726,10 @@ public class ObjectManager {
 						text1 = bossString1;
 						text2 = bossString2;
 					}
+					else if (stringState == ENTER_STRING) {
+						text1 = enterString1;
+						text2 = enterString2;
+					}
 					else if (stringState == ZOMBIESPAWN_STRING) {
 						text1 = zombieSpawnString1;
 						text2 = zombieSpawnString2;
@@ -726,10 +741,10 @@ public class ObjectManager {
 					
 					//System.out.println(text1+ " " +text2);
 					if(text2 == "") {
-						g.drawString(text1, 45, 715);
+						g.drawString(text1, 35, 715);
 					} else {
-						g.drawString(text1, 45, 705);
-						g.drawString(text2, 45, 730);	
+						g.drawString(text1, 35, 705);
+						g.drawString(text2, 35, 730);	
 					}
 				
 				

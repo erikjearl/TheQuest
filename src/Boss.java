@@ -26,9 +26,9 @@ public class Boss extends GameObject {
 	void draw(Graphics g) {
 		if (isDisplayed) {
 			
-			if (isAlive) {
+			if (isAlive && health > 400) {
 				g.setColor(Color.magenta);
-			}else if(health > 300) {
+			}else if(health >0) {
 				g.setColor(Color.green);
 			}else {
 				g.setColor(Color.black);

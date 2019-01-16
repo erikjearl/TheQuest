@@ -28,6 +28,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	boolean down;
 	boolean left;
 	boolean right;
+	boolean iPressed;
+	boolean oPressed;
+	boolean pPressed;
 
 	BufferedImage[][] BGImage;
 	public static BufferedImage GrassRoom;
@@ -51,7 +54,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	Key key = new Key(player.x, player.y - 25, 30, 15);
 	Boss boss = new Boss(200, 400, 300, 300);
 
-	public GamePanel() {
+	DeathListener death;
+	
+	public GamePanel(DeathListener death) {
+		this.death = death;
 		titleFont = new Font("Arial", Font.BOLD, 48);
 		subFont = new Font("Arial", Font.PLAIN, 30);
 		timer = new Timer(1000 / 60, this);
@@ -88,7 +94,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		objMan.update();
 		if (!player.isAlive) {
 			currentScreen++;
-			System.out.println("DEAD");
+			//System.out.println("DEAD");
 		}
 	}
 
@@ -160,14 +166,25 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 
-		if (currentScreen == titleScreen) {
+		if (currentScreen == titleScreen || currentScreen == creditScreen) {
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				currentScreen++;
+				//objMan = new ObjectManager(player, sword, wiseMan, key, boss);
+				  currentAreaX = 1;
+				  currentAreaY = 1;
+				  ObjectManager.clearedY1 = false;
+				  ObjectManager.clearedY2 = false;
+				  ObjectManager.clearedY3 = false;
+				  ObjectManager.clearedY4 = false;
+				  Player.health = 5;
+				  Player.playerScore = 0;
+				  timer.stop();
+				  death.restart();
 			}
 		}
 
@@ -192,27 +209,22 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			sword.isRight = true;
 		}
 		
-		if (e.getKeyCode() == KeyEvent.VK_K) {
-			key.hasKey = true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_L) {
-			Player.health++;
+		if (e.getKeyCode() == KeyEvent.VK_I) {
+			iPressed = true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_O) {
+			oPressed = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_P) {
+			pPressed = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_K) {
 			currentScreen++;
 			System.out.println("skip");
 		}
-		if (e.getKeyCode() == KeyEvent.VK_I) {
+		if (e.getKeyCode() == KeyEvent.VK_J) {
 			objMan.finalTalk = true;
 			System.out.println("boss dead");
-		}
-		if (e.getKeyCode() == KeyEvent.VK_P) {
-			objMan.purgeAllMonsters();
-			System.out.println("killed monsters");
-		}
-		if (e.getKeyCode() == KeyEvent.VK_U) {
-			objMan.man.health = 499;
-			System.out.println("boss reducted");
 		}
 		
 
@@ -245,6 +257,15 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			holdingSpaceBar = false;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_I) {
+			iPressed = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_O) {
+			oPressed = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_P) {
+			pPressed = false;
+		}
 	}
 
 	@Override
@@ -252,7 +273,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 		ticks++;
 		
-		
+		if(iPressed&&oPressed&&pPressed) {
+			Player.health++;
+			pPressed = false;
+		}
 		
 		//System.out.println(up  + " "+ down + " " +left + " " +right + player.x + " " + player.y);
 		
