@@ -71,7 +71,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			RedRoom = ImageIO.read(this.getClass().getResourceAsStream("RedRoom.png"));
 			StoneFloor = ImageIO.read(this.getClass().getResourceAsStream("StoneFloor.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -163,13 +163,13 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 
 		if (currentScreen == titleScreen || currentScreen == creditScreen) {
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -240,7 +240,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			up = false;
 		}
@@ -270,7 +270,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		ticks++;
 		
 		if(iPressed&&oPressed&&pPressed) {
