@@ -11,7 +11,7 @@ public class TheQuest{
 	DeathListener death = new DeathListener() {
 		@Override
 		public void restart() {
-			// TODO Auto-generated method stub
+			
 			panel.removeAll();
 			frame.dispose();
 			TheQuest quest = new TheQuest();

@@ -12,7 +12,6 @@ public class Sword extends GameObject{
 	
 	public Sword(int x, int y) {
 		super(x, y, width, height);
-		// TODO Auto-generated constructor stub
 		box = new Rectangle(x, y, width, height);
 	}
 	

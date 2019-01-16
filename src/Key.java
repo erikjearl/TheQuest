@@ -7,7 +7,7 @@ boolean hasKey;
 	public Key(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		hasKey=false;
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	void update() {
