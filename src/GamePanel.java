@@ -40,6 +40,21 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	public static BufferedImage RedRoom;
 	public static BufferedImage StoneFloor;
 
+	public static BufferedImage Knight;
+	public static BufferedImage HurtKnight;
+	public static BufferedImage Knight2;
+	public static BufferedImage HurtKnight2;
+	public static BufferedImage SwordUp;
+	public static BufferedImage SwordDR;
+	public static BufferedImage SwordDL;
+	public static BufferedImage Monster;
+	public static BufferedImage Zombie;
+	public static BufferedImage ZombieKing;
+	public static BufferedImage Wizard;
+	public static BufferedImage Key;
+	public static BufferedImage Boss;
+	public static BufferedImage Boss2;
+
 	Font titleFont;
 	Font subFont;
 
@@ -48,14 +63,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 	// objects
 	ObjectManager objMan;
-	Player player = new Player(350, 350, 50, 50);
+	Player player = new Player(350, 350, 50, 75);
 	Sword sword = new Sword(player.x, player.y);
 	WiseMan wiseMan = new WiseMan(600, 300);
-	Key key = new Key(player.x, player.y - 25, 30, 15);
+	Key key = new Key(player.x, player.y - 25, 30, 30);
 	Boss boss = new Boss(200, 400, 300, 300);
 
 	DeathListener death;
-	
+
 	public GamePanel(DeathListener death) {
 		this.death = death;
 		titleFont = new Font("Arial", Font.BOLD, 48);
@@ -70,8 +85,23 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			PurpleRoom = ImageIO.read(this.getClass().getResourceAsStream("PurpleRoom.png"));
 			RedRoom = ImageIO.read(this.getClass().getResourceAsStream("RedRoom.png"));
 			StoneFloor = ImageIO.read(this.getClass().getResourceAsStream("StoneFloor.png"));
+
+			Knight = ImageIO.read(this.getClass().getResourceAsStream("knight.png"));
+			HurtKnight = ImageIO.read(this.getClass().getResourceAsStream("hurtKnight.png"));
+			Knight2 = ImageIO.read(this.getClass().getResourceAsStream("knight2.png"));
+			HurtKnight2 = ImageIO.read(this.getClass().getResourceAsStream("hurtKnight2.png"));
+			SwordUp = ImageIO.read(this.getClass().getResourceAsStream("sword1.png"));
+			SwordDR = ImageIO.read(this.getClass().getResourceAsStream("sword2.png"));
+			SwordDL = ImageIO.read(this.getClass().getResourceAsStream("sword3.png"));
+			Monster = ImageIO.read(this.getClass().getResourceAsStream("Monster.png"));
+			Zombie = ImageIO.read(this.getClass().getResourceAsStream("Zombie.png"));
+			ZombieKing = ImageIO.read(this.getClass().getResourceAsStream("ZombieKing.png"));
+			Wizard = ImageIO.read(this.getClass().getResourceAsStream("Wizard.png"));
+			Key = ImageIO.read(this.getClass().getResourceAsStream("Key.png"));
+			// Boss = ImageIO.read(this.getClass().getResourceAsStream("Boss.png"));
+			// Boss2 = ImageIO.read(this.getClass().getResourceAsStream("Boss2.png"));
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
 
@@ -82,7 +112,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		BGImage[1][2] = RedRoom;
 		BGImage[2][1] = GreenRoom;
 		BGImage[3][1] = StoneFloor;
-		
 
 	}
 
@@ -94,7 +123,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		objMan.update();
 		if (!player.isAlive) {
 			currentScreen++;
-			//System.out.println("DEAD");
+			// System.out.println("DEAD");
 		}
 	}
 
@@ -112,7 +141,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 	void drawGameScreen(Graphics g) {
 		updateGameScreen();
-		
+
 		g.drawImage(BGImage[currentAreaX][currentAreaY], WIDTH - 1, HEIGHT - 2, null);
 		objMan.checkCollision();
 		objMan.purgeObjects();
@@ -126,23 +155,21 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	void drawCreditScreen(Graphics g) {
 		g.setColor(Color.cyan);
 		g.fillRect(0, 0, TheQuest.width, TheQuest.height);
-		
+
 		g.setFont(titleFont);
 		g.setColor(Color.MAGENTA);
 		g.drawString("The Quest", 235, 300);
-		
-		 if (!player.isAlive) {
-		g.setFont(subFont);
-		g.drawString("YOU DIED", 275, 350);
-		g.drawString("Score: " + Player.playerScore, 291, 385);
-		 }
-		else if(player.isAlive) {
+
+		if (!player.isAlive) {
+			g.setFont(subFont);
+			g.drawString("YOU DIED", 275, 350);
+			g.drawString("Score: " + Player.playerScore, 291, 385);
+		} else if (player.isAlive) {
 			g.setFont(subFont);
 			g.drawString("YOU WON!", 273, 350);
 			g.drawString("Score: " + Player.playerScore * Player.health, 291, 385);
 		}
-		
-		
+
 	}
 
 	@Override
@@ -163,28 +190,26 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
 
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
 
 		if (currentScreen == titleScreen || currentScreen == creditScreen) {
 			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				currentScreen++;
-				//objMan = new ObjectManager(player, sword, wiseMan, key, boss);
-				  currentAreaX = 1;
-				  currentAreaY = 1;
-				  ObjectManager.clearedY1 = false;
-				  ObjectManager.clearedY2 = false;
-				  ObjectManager.clearedY3 = false;
-				  ObjectManager.clearedY4 = false;
-				  Player.health = 5;
-				  Player.playerScore = 0;
-				  timer.stop();
-				  death.restart();
+				// objMan = new ObjectManager(player, sword, wiseMan, key, boss);
+				currentAreaX = 1;
+				currentAreaY = 1;
+				ObjectManager.clearedY1 = false;
+				ObjectManager.clearedY2 = false;
+				ObjectManager.clearedY3 = false;
+				ObjectManager.clearedY4 = false;
+				Player.health = 5;
+				Player.playerScore = 0;
+				timer.stop();
+				death.restart();
 			}
 		}
 
@@ -192,55 +217,53 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			currentScreen = titleScreen;
 		}
 
-		if (currentScreen == GameScreen)
-		{
-		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			up = true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			down = true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			left = true;
-			sword.isRight = false;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			right = true;
-			sword.isRight = true;
-		}
-		
-		if (e.getKeyCode() == KeyEvent.VK_I) {
-			iPressed = true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_O) {
-			oPressed = true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_P) {
-			pPressed = true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_K) {
-			currentScreen++;
-			System.out.println("skip");
-		}
-		if (e.getKeyCode() == KeyEvent.VK_J) {
-			objMan.finalTalk = true;
-			System.out.println("boss dead");
-		}
-		
+		if (currentScreen == GameScreen) {
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				up = true;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				down = true;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				left = true;
+				Sword.isRight = false;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				right = true;
+				Sword.isRight = true;
+			}
 
-		if (e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
-			sword.update();
-			Sword.isAttacking = true;
-			startAttack = ticks;
-			holdingSpaceBar = true;
-		}
+			if (e.getKeyCode() == KeyEvent.VK_I) {
+				iPressed = true;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_O) {
+				oPressed = true;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_P) {
+				pPressed = true;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_K) { // 1st boss
+				key.hasKey = true;
+				System.out.println("has key");
+			}
+			// if (e.getKeyCode() == KeyEvent.VK_J) { //2nd boss
+			// objMan.finalTalk = true;
+			// System.out.println("boss dead");
+			// }
+
+			if (e.getKeyCode() == KeyEvent.VK_SPACE && !Sword.isAttacking && !holdingSpaceBar) {
+				sword.update();
+				Sword.isAttacking = true;
+				startAttack = ticks;
+				holdingSpaceBar = true;
+			}
 		}
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			up = false;
 		}
@@ -270,16 +293,17 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		ticks++;
-		
-		if(iPressed&&oPressed&&pPressed) {
+
+		if (iPressed && oPressed && pPressed) {
 			Player.health++;
 			pPressed = false;
 		}
-		
-		//System.out.println(up  + " "+ down + " " +left + " " +right + player.x + " " + player.y);
-		
+
+		// System.out.println(up + " "+ down + " " +left + " " +right + player.x + " " +
+		// player.y);
+
 		if (up) {
 			player.y -= player.speed;
 		}
@@ -293,12 +317,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			player.x += player.speed;
 		}
 
-		
-
 		if (player.y < 0) {
 			if (currentAreaY == 0 || (BGImage[currentAreaX][currentAreaY - 1] == null)) {
-				//up = false;
-				player.y= 1;
+				// up = false;
+				player.y = 1;
 			} else {
 				currentAreaY--;
 				player.y = TheQuest.height - player.height;
@@ -308,8 +330,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 		if (player.y > TheQuest.height - player.height) {
 			if (currentAreaY == 2 || (BGImage[currentAreaX][currentAreaY + 1] == null)) {
-				//down = false;
-				player.y = 699;
+				// down = false;
+				player.y = 680;
 
 			} else if (currentAreaY == 1 && !key.hasKey && !isUnlocked) {
 				player.y = 695;
@@ -328,8 +350,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		}
 
 		if (player.x < 0) {
-			if (currentAreaX == 0 || (currentAreaX==3 && wiseMan.isAlive) || (BGImage[currentAreaX - 1][currentAreaY] == null)) {
-				//left = false;
+			if (currentAreaX == 0 || (currentAreaX == 3 && wiseMan.isAlive)
+					|| (BGImage[currentAreaX - 1][currentAreaY] == null)) {
+				// left = false;
 				player.x = 1;
 			} else {
 				player.x = TheQuest.width - player.width;
@@ -337,8 +360,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			}
 		}
 		if (player.x > TheQuest.width - player.width) {
-			if ((currentAreaX == 2 && !objMan.talkedZ) || currentAreaX == 3 || (BGImage[currentAreaX + 1][currentAreaY] == null)) {
-				//right = false;
+			if ((currentAreaX == 2 && !objMan.talkedZ) || currentAreaX == 3
+					|| (BGImage[currentAreaX + 1][currentAreaY] == null)) {
+				// right = false;
 				player.x = 699;
 			} else {
 				player.x = 0;
@@ -354,24 +378,24 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		// System.out.println(ticks + " " + startAttack);
 		key.y = player.y - 25;
 		if (!Sword.isAttacking) {
-			sword.y = player.y - Sword.width;
-			if (sword.isRight) {
-				sword.x = player.x + player.width;
+			sword.y = player.y - Sword.width + 22;
+			if (Sword.isRight) {
+				sword.x = player.x + player.width - 7;
 				key.x = player.x - 60;
 			} else {
-				sword.x = player.x - Sword.width;
+				sword.x = player.x - Sword.width + 7;
 				key.x = player.x + player.width + 50;
 			}
 		}
 
 		else {
-			sword.y = player.y + (player.height / 2);
-			if (sword.isRight) {
-				sword.x = player.x + player.width;
-				key.x = player.x - 60;
+			sword.y = player.y + (player.height / 2) + 10;
+			if (Sword.isRight) {
+				sword.x = player.x + player.width - 10;
+				key.x = player.x - 40;
 			} else {
-				sword.x = player.x - Sword.height;
-				key.x = 2 * player.x + player.width + 50;
+				sword.x = player.x - Sword.height + 10;
+				key.x = player.x + player.width - 60;
 			}
 		}
 

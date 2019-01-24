@@ -11,7 +11,7 @@ public class Player extends GameObject {
 		super(x, y, width, height);
 		speed = 7;
 		health = 5;
-		playerScore =0;
+		playerScore = 0;
 	}
 
 	void update() {
@@ -19,18 +19,27 @@ public class Player extends GameObject {
 	}
 
 	void draw(Graphics g) {
-		if (!isHurt) {
-			g.setColor(Color.DARK_GRAY);
+
+		if (Sword.isRight) {
+			if (!isHurt) {
+				g.drawImage(GamePanel.Knight, x, y, width, height, null);
+			} else {
+				g.drawImage(GamePanel.HurtKnight, x, y, width, height, null);
+			}
 		} else {
-			g.setColor(Color.RED);
+			if (!isHurt) {
+				g.drawImage(GamePanel.Knight2, x, y, width, height, null);
+			} else {
+				g.drawImage(GamePanel.HurtKnight2, x, y, width, height, null);
+			}
 		}
-		g.fillRect(x, y, width, height);
+		// g.drawRect(x, y, width, height);
 
 		g.setColor(Color.RED);
-		for(int i =0; i < health; i++) {
-			g.fillRect(710 - (25 *i), 17, 20, 20);
+		for (int i = 0; i < health; i++) {
+			g.fillRect(710 - (25 * i), 17, 20, 20);
 		}
-		
+
 	}
 
 	int getX() {
