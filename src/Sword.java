@@ -19,7 +19,7 @@ public class Sword extends GameObject {
 		// super.update();
 		// System.out.println(collisionBox);
 		if (isAttacking) {
-			box.setBounds(x, y, height, width);
+			box.setBounds(x, y, height+10, width);
 		} else {
 			box.setBounds(x, y, width, height);
 		}

@@ -35,7 +35,7 @@ public class ObjectManager {
 	private static final String welcomeString2 = "you should probly go check with the old man to see what your job is";
 
 	private static final int SWORD_STRING = 2;
-	private static final String swordString1 = "Here is a Sword to help you on your journey";
+	private static final String swordString1 = "Here is a Sword to help you on your quest to kill monsters";
 	private static final String swordString2 = "";
 
 	private static final int SECOND_STRING = 3;
@@ -77,6 +77,7 @@ public class ObjectManager {
 	private static final int ENDING_STRING = 12;
 	private static final String endingString1 = "RIP";
 	private static final String endingString2 = "";
+	
 
 	private int stringState = WELCOME_STRING;
 
@@ -651,7 +652,7 @@ public class ObjectManager {
 
 	}
 
-	private void makeText(int state) {
+	 void makeText(int state) {
 		now = new Date();
 		if (stringState != state) {
 			startString = new Date();
@@ -708,6 +709,9 @@ public class ObjectManager {
 			} else if (stringState == ENDING_STRING) {
 				text1 = endingString1;
 				text2 = endingString2;
+			} else if (stringState == GamePanel.KEY_STRING) {
+				text1 = GamePanel.keyString1;
+				text2 = GamePanel.keyString2;
 			}
 
 			// System.out.println(text1+ " " +text2);

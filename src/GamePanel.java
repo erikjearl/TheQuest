@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -54,6 +53,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	public static BufferedImage Key;
 	public static BufferedImage Boss;
 	public static BufferedImage Boss2;
+	public static BufferedImage Fire;
+
+    static final int KEY_STRING = 13;
+	static final String keyString1 = "You need a key to enter this room";
+	static final String keyString2 = "Maybe you should talk to the wizard";
 
 	Font titleFont;
 	Font subFont;
@@ -98,8 +102,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			ZombieKing = ImageIO.read(this.getClass().getResourceAsStream("ZombieKing.png"));
 			Wizard = ImageIO.read(this.getClass().getResourceAsStream("Wizard.png"));
 			Key = ImageIO.read(this.getClass().getResourceAsStream("Key.png"));
-			// Boss = ImageIO.read(this.getClass().getResourceAsStream("Boss.png"));
-			// Boss2 = ImageIO.read(this.getClass().getResourceAsStream("Boss2.png"));
+			Boss = ImageIO.read(this.getClass().getResourceAsStream("Boss.png"));
+			Boss2 = ImageIO.read(this.getClass().getResourceAsStream("Boss2.png"));
+			Fire = ImageIO.read(this.getClass().getResourceAsStream("fire.png"));
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -135,7 +140,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		g.setColor(Color.CYAN);
 		g.drawString("The Quest", 235, 300);
 		g.setFont(subFont);
-		g.drawString("press space to start", 235, 350);
+		g.drawString("Use the arrow keys to move and space to attack", 50, 350);
+		g.drawString("press Enter to start", 235, 390);
 
 	}
 
@@ -158,16 +164,18 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 		g.setFont(titleFont);
 		g.setColor(Color.MAGENTA);
-		g.drawString("The Quest", 235, 300);
+		g.drawString("The Quest", 235, 100);
 
 		if (!player.isAlive) {
 			g.setFont(subFont);
 			g.drawString("YOU DIED", 275, 350);
 			g.drawString("Score: " + Player.playerScore, 291, 385);
+			g.drawString("press Enter to play again", 200, 700);
 		} else if (player.isAlive) {
 			g.setFont(subFont);
 			g.drawString("YOU WON!", 273, 350);
 			g.drawString("Score: " + Player.playerScore * Player.health, 291, 385);
+			g.drawString("press Enter to play again", 200, 700);
 		}
 
 	}
@@ -197,7 +205,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	public void keyPressed(KeyEvent e) {
 
 		if (currentScreen == titleScreen || currentScreen == creditScreen) {
-			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				currentScreen++;
 				// objMan = new ObjectManager(player, sword, wiseMan, key, boss);
 				currentAreaX = 1;
@@ -242,10 +250,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			if (e.getKeyCode() == KeyEvent.VK_P) {
 				pPressed = true;
 			}
-			if (e.getKeyCode() == KeyEvent.VK_K) { // 1st boss
-				key.hasKey = true;
-				System.out.println("has key");
-			}
+//			if (e.getKeyCode() == KeyEvent.VK_K) { // 1st boss
+//				key.hasKey = true;
+//				System.out.println("has key");
+//			}
 			// if (e.getKeyCode() == KeyEvent.VK_J) { //2nd boss
 			// objMan.finalTalk = true;
 			// System.out.println("boss dead");
@@ -334,9 +342,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 				player.y = 680;
 
 			} else if (currentAreaY == 1 && !key.hasKey && !isUnlocked) {
-				player.y = 695;
+				player.y = 600;
 				down = false;
-				JOptionPane.showMessageDialog(null, "You must first get they key from a wise man");
+				objMan.makeText(KEY_STRING);
 
 			} else if (currentAreaY == 0) {
 				currentAreaY++;

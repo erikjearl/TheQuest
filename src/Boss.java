@@ -27,13 +27,14 @@ public class Boss extends GameObject {
 		if (isDisplayed) {
 			
 			if (isAlive && health > 400) {
-				g.setColor(Color.magenta);
+				g.drawImage(GamePanel.Boss, x, y, width, height, null);
 			}else if(health >0) {
-				g.setColor(Color.green);
-			}else {
-				g.setColor(Color.black);
+				g.drawImage(GamePanel.Boss2, x, y, width, height, null);
 			}
-			g.fillRect(x, y, height, width);
+			if (isAlive) {
+				g.setColor(Color.red);
+				g.drawRect(x, y, height, width);
+			}
 		}
 	}
 	
