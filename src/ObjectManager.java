@@ -273,9 +273,8 @@ public class ObjectManager {
 				monsterAtt = GamePanel.ticks;
 			}
 		}
-		System.out.println("ticks: " +GamePanel.ticks);
-		System.out.println("Used sheild " + (GamePanel.ticks - useShield));
-		System.out.println("Can use shield: " + Player.canUseShield);
+		//System.out.println("ticks: " +GamePanel.ticks);
+		//System.out.println("Can use shield: " + Player.canUseShield);
 		if (p.isHurt && ((GamePanel.ticks - monsterAtt > 50))) {
 			p.isHurt = false;
 		}

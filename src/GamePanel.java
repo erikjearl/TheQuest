@@ -22,7 +22,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	static int currentScreen = titleScreen;
 	static int currentAreaX = 1;
 	static int currentAreaY = 1;
-
+	
+	boolean cheated;
+	
 	boolean up;
 	boolean down;
 	boolean left;
@@ -171,12 +173,15 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		if (!player.isAlive) {
 			g.setFont(subFont);
 			g.drawString("YOU DIED", 275, 350);
-			g.drawString("Score: " + Player.playerScore, 291, 385);
+			g.drawString("Score: " + Player.playerScore, 285, 385);
 			g.drawString("press Enter to play again", 200, 700);
 		} else if (player.isAlive) {
 			g.setFont(subFont);
 			g.drawString("YOU WON!", 273, 350);
-			g.drawString("Score: " + Player.playerScore * Player.health, 291, 385);
+			g.drawString("Score: " + Player.playerScore * Player.health, 285, 385);
+			if(cheated) {
+				g.drawString("Now try doing it without cheating :)", 115, 420);
+			}
 			g.drawString("press Enter to play again", 200, 700);
 		}
 
@@ -251,6 +256,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			}
 			if (e.getKeyCode() == KeyEvent.VK_P) {
 				pPressed = true;
+				
 			}
 //			if (e.getKeyCode() == KeyEvent.VK_K) { // 1st boss
 //				key.hasKey = true;
@@ -313,6 +319,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 		if (iPressed && oPressed && pPressed) {
 			Player.health++;
+			cheated = true;
 			pPressed = false;
 		}
 
