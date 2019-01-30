@@ -723,6 +723,7 @@ public class ObjectManager {
 				text1 = GamePanel.keyString1;
 				text2 = GamePanel.keyString2;
 			}
+			
 
 			// System.out.println(text1+ " " +text2);
 			if (text2 == "") {
