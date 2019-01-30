@@ -14,6 +14,7 @@ public class ObjectManager {
 	Font textFont = new Font("Herculanum", Font.PLAIN, 16);
 
 	long monsterAtt = 0;
+	static long useShield = 0;
 	long manHurt = 0;
 	long bossHurt = 0;
 	Date startString = new Date();
@@ -241,7 +242,7 @@ public class ObjectManager {
 
 	void checkCollision() {
 		for (Monster m : monsters) {
-			if (p.collisionBox.intersects(m.collisionBox) && !p.isHurt) {
+			if (p.collisionBox.intersects(m.collisionBox) && !p.isHurt && !Player.shield) {
 				Player.health--;
 				p.isHurt = true;
 				monsterAtt = GamePanel.ticks;
@@ -253,7 +254,7 @@ public class ObjectManager {
 			}
 		}
 		for (Zombie zomb : zombies) {
-			if (p.collisionBox.intersects(zomb.collisionBox) && !p.isHurt && zomb.type != 3) {
+			if (p.collisionBox.intersects(zomb.collisionBox) && !p.isHurt && zomb.type != 3 && !Player.shield) {
 				Player.health--;
 				p.isHurt = true;
 				monsterAtt = GamePanel.ticks;
@@ -265,16 +266,26 @@ public class ObjectManager {
 			}
 		}
 		for (Projectile proj : projectiles) {
-			if (p.collisionBox.intersects(proj.collisionBox) && !p.isHurt) {
+			if (p.collisionBox.intersects(proj.collisionBox) && !p.isHurt && !Player.shield) {
 				Player.health--;
 				p.isHurt = true;
 				proj.isAlive = false;
 				monsterAtt = GamePanel.ticks;
 			}
 		}
-
+		System.out.println("ticks: " +GamePanel.ticks);
+		System.out.println("Used sheild " + (GamePanel.ticks - useShield));
+		System.out.println("Can use shield: " + Player.canUseShield);
 		if (p.isHurt && ((GamePanel.ticks - monsterAtt > 50))) {
 			p.isHurt = false;
+		}
+		if (GamePanel.ticks - useShield > 75) {
+			Player.shield = false;
+		}
+		if (GamePanel.ticks - useShield > 500) {
+			Player.canUseShield = true;
+		}else {
+			Player.canUseShield = false;
 		}
 
 		if (sword.box.intersects(z1.collisionBox) && z1.isAlive && Player.playerScore > 9) {
@@ -413,7 +424,7 @@ public class ObjectManager {
 		if (GamePanel.currentAreaX == 1 && GamePanel.currentAreaY == 2) {
 			key.hasKey = false;
 
-			if (p.collisionBox.intersects(boss.collisionBox) && !p.isHurt && boss.isAlive) {
+			if (p.collisionBox.intersects(boss.collisionBox) && !p.isHurt && boss.isAlive && !Player.shield) {
 				p.isHurt = true;
 				Player.health--;
 				monsterAtt = GamePanel.ticks;
@@ -491,7 +502,7 @@ public class ObjectManager {
 					// System.out.println("Man's Health: " +man.health);
 				}
 			}
-			if (p.collisionBox.intersects(man.collisionBox) && !p.isHurt && man.isAlive) {
+			if (p.collisionBox.intersects(man.collisionBox) && !p.isHurt && man.isAlive && !Player.shield) {
 				p.isHurt = true;
 				Player.health--;
 				monsterAtt = GamePanel.ticks;
@@ -566,7 +577,7 @@ public class ObjectManager {
 				}
 			}
 			if (m.moveType == 2) {
-				if (GamePanel.ticks % 2 == 0) {
+				if (GamePanel.ticks % 5 == 0) {
 					if (dCurrent == 1 && m.getY() < (TheQuest.height - m.height)) {
 						m.setY((m.getY() + dCurrent));
 					} else {
@@ -629,7 +640,7 @@ public class ObjectManager {
 			GamePanel.ticks++;
 		}
 		for (Zombie zomb : zombies) {
-			if (GamePanel.ticks % 4 == 0 && zomb.type == 0) {
+			if (GamePanel.ticks % 5 == 0 && zomb.type == 0) {
 				if (p.getX() - zomb.getX() < 0) {
 					zomb.setX((zomb.getX() - 1));
 				} else if (p.getX() + 25 - zomb.getX() > 0) {
@@ -666,7 +677,7 @@ public class ObjectManager {
 		String text2 = "";
 		g.setFont(textFont);
 
-		if (stringState > 0 && now.getTime() - startString.getTime() < 3000) {
+		if (stringState > 0 && now.getTime() - startString.getTime() < 5000) {
 			g.setColor(Color.black);
 			g.fillRect(0, 675, 750, 75);
 			g.setColor(Color.white);

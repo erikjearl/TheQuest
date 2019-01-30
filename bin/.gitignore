@@ -1,5 +1,7 @@
 /BlueRoom.png
 /Boss.class
+/Boss.png
+/Boss2.png
 /DeathListener.class
 /GameObject.class
 /GamePanel.class
@@ -22,6 +24,7 @@
 /Zombie.class
 /Zombie.png
 /ZombieKing.png
+/fire.png
 /hurtKnight.png
 /hurtKnight2.png
 /knight.png
@@ -30,6 +33,3 @@
 /sword2.png
 /sword3.png
 /wizard.png
-/Boss.png
-/Boss2.png
-/fire.png

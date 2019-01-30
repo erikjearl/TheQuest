@@ -141,7 +141,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 		g.drawString("The Quest", 235, 300);
 		g.setFont(subFont);
 		g.drawString("Use the arrow keys to move and space to attack", 50, 350);
-		g.drawString("press Enter to start", 235, 390);
+		g.drawString("Press shift to use your shield", 155, 380);
+		g.drawString("its charge is shown under your health", 110, 410);
+		g.drawString("press Enter to start", 235, 500);
 
 	}
 
@@ -265,6 +267,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 				startAttack = ticks;
 				holdingSpaceBar = true;
 			}
+			if (e.getKeyCode() == KeyEvent.VK_SHIFT && Player.canUseShield) {
+				ObjectManager.useShield = ticks;
+				Player.shield = true;
+			}
+			
 		}
 
 	}
