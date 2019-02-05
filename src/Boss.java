@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.JOptionPane;
-
 public class Boss extends GameObject {
 	int health;
 	boolean isDisplayed;

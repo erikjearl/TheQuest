@@ -102,7 +102,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 			Monster = ImageIO.read(this.getClass().getResourceAsStream("Monster.png"));
 			Zombie = ImageIO.read(this.getClass().getResourceAsStream("Zombie.png"));
 			ZombieKing = ImageIO.read(this.getClass().getResourceAsStream("ZombieKing.png"));
-			Wizard = ImageIO.read(this.getClass().getResourceAsStream("Wizard.png"));
+			Wizard = ImageIO.read(this.getClass().getResourceAsStream("wizard.png"));
 			Key = ImageIO.read(this.getClass().getResourceAsStream("Key.png"));
 			Boss = ImageIO.read(this.getClass().getResourceAsStream("Boss.png"));
 			Boss2 = ImageIO.read(this.getClass().getResourceAsStream("Boss2.png"));
